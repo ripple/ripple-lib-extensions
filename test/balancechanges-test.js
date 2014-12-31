@@ -8,14 +8,14 @@ var createAccountBalanceChanges = [
     balance_change: {
       value: '100',
       currency: 'XRP',
-      issuer: ''
+      counterparty: ''
     }
   },
   { address: 'rKmBGxocj9Abgy25J51Mk1iqFzW9aVF9Tc',
     balance_change: {
       value: '-100.012',
       currency: 'XRP',
-      issuer: ''
+      counterparty: ''
     },
   }
 ];
@@ -26,21 +26,38 @@ var usdFirstPaymentBalanceChanges = [
     balance_change: {
       value: '-0.01',
       currency: 'USD',
-      issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'
+      counterparty: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'
     }
   },
-  { address: 'rLDYrujdKUfVx28T9vRDAbyJ7G2WVXKo4K',
+  {
+    address: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q',
     balance_change: {
-      value: '0.01',
+      counterparty: 'rKmBGxocj9Abgy25J51Mk1iqFzW9aVF9Tc',
       currency: 'USD',
-      issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'
+      value: '0.01'
+    }
+  },
+  {
+    address: 'rLDYrujdKUfVx28T9vRDAbyJ7G2WVXKo4K',
+    balance_change: {
+      counterparty: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q',
+      currency: 'USD',
+      value: '0.01'
+    }
+  },
+  {
+    address: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q',
+    balance_change: {
+      counterparty: 'rLDYrujdKUfVx28T9vRDAbyJ7G2WVXKo4K',
+      currency: 'USD',
+      value: '-0.01'
     }
   },
   { address: 'rKmBGxocj9Abgy25J51Mk1iqFzW9aVF9Tc',
     balance_change: {
       value: '-0.012',
       currency: 'XRP',
-      issuer: ''
+      counterparty: ''
     }
   }
 ];
@@ -51,21 +68,35 @@ var usdFullPaymentBalanceChanges = [
     balance_change: {
       value: '0.2',
       currency: 'USD',
-      issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'
+      counterparty: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'
+    }
+  },
+  { address: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q',
+    balance_change: {
+      value: '-0.2',
+      currency: 'USD',
+      counterparty: 'rKmBGxocj9Abgy25J51Mk1iqFzW9aVF9Tc'
     }
   },
   { address: 'rLDYrujdKUfVx28T9vRDAbyJ7G2WVXKo4K',
     balance_change: {
       value: '-0.2',
       currency: 'USD',
-      issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'
+      counterparty: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'
+    }
+  },
+  { address: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q',
+    balance_change: {
+      value: '0.2',
+      currency: 'USD',
+      counterparty: 'rLDYrujdKUfVx28T9vRDAbyJ7G2WVXKo4K'
     }
   },
   { address: 'rLDYrujdKUfVx28T9vRDAbyJ7G2WVXKo4K',
     balance_change: {
       value: '-0.012',
       currency: 'XRP',
-      issuer: ''
+      counterparty: ''
     }
   }
 ];
@@ -81,7 +112,7 @@ var setTrustlineBalanceChanges = [
     balance_change: {
       value: '-0.012',
       currency: 'XRP',
-      issuer: ''
+      counterparty: ''
     }
   }
 ];
@@ -97,7 +128,15 @@ var deleteTrustlineBalanceChanges = [
       balance_change: {
         value: '0.02',
         currency: 'USD',
-        issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'
+        counterparty: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'
+      }
+    },
+    {
+      address: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q',
+      balance_change: {
+        value: '-0.02',
+        currency: 'USD',
+        counterparty: 'rKmBGxocj9Abgy25J51Mk1iqFzW9aVF9Tc'
       }
     },
     {
@@ -105,7 +144,15 @@ var deleteTrustlineBalanceChanges = [
       balance_change: {
         value: '-0.02',
         currency: 'USD',
-        issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'
+        counterparty: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'
+      }
+    },
+    {
+      address: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q',
+      balance_change: {
+        value: '0.02',
+        currency: 'USD',
+        counterparty: 'rLDYrujdKUfVx28T9vRDAbyJ7G2WVXKo4K'
       }
     },
     {
@@ -113,17 +160,25 @@ var deleteTrustlineBalanceChanges = [
       balance_change: {
         value: '-0.012',
         currency: 'XRP',
-        issuer: ''
+        counterparty: ''
       }
     }
 ];
 
 var redeemBalanceChanges = [
   {
+    address: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
+    balance_change: {
+      currency: 'USD',
+      counterparty: 'rPMh7Pi9ct699iZUTWaytJUoHcJ7cgyziK',
+      value: '100'
+    }
+  },
+  {
     address: 'rPMh7Pi9ct699iZUTWaytJUoHcJ7cgyziK',
     balance_change: {
       currency: 'USD',
-      issuer: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
+      counterparty: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
       value: '-100'
     }
   },
@@ -131,7 +186,7 @@ var redeemBalanceChanges = [
     address: 'rPMh7Pi9ct699iZUTWaytJUoHcJ7cgyziK',
     balance_change: {
       currency: 'XRP',
-      issuer: '',
+      counterparty: '',
       value: '-0.00001'
     }
   }
@@ -139,26 +194,26 @@ var redeemBalanceChanges = [
 
 var redeemThenIssueBalanceChanges = [
   {
-    address: 'rPMh7Pi9ct699iZUTWaytJUoHcJ7cgyziK',
-    balance_change: {
-      currency: 'USD',
-      issuer: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
-      value: '-100'
-    }
-  },
-  {
     address: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
     balance_change: {
       currency: 'USD',
-      issuer: 'rPMh7Pi9ct699iZUTWaytJUoHcJ7cgyziK',
-      value: '100'
+      counterparty: 'rPMh7Pi9ct699iZUTWaytJUoHcJ7cgyziK',
+      value: '200'
+    }
+  },
+  {
+    address: 'rPMh7Pi9ct699iZUTWaytJUoHcJ7cgyziK',
+    balance_change: {
+      currency: 'USD',
+      counterparty: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
+      value: '-200'
     }
   },
   {
     address: 'rPMh7Pi9ct699iZUTWaytJUoHcJ7cgyziK',
     balance_change: {
       currency: 'XRP',
-      issuer: '',
+      counterparty: '',
       value: '-0.00001'
     }
   }
@@ -166,59 +221,107 @@ var redeemThenIssueBalanceChanges = [
 
 var multipathBalanceChanges = [
   {
-    "address": "r4nmQNH4Fhjfh6cHDbvVSsBv7KySbj4cBf",
-    "balance_change": {
-      "issuer": "rrnsYgWn13Z28GtRgznrSUsLfMkvsXCZSu",
-      "currency": "USD",
-      "value": "-100"
+    'address': 'rrnsYgWn13Z28GtRgznrSUsLfMkvsXCZSu',
+    'balance_change': {
+      'counterparty': 'r4nmQNH4Fhjfh6cHDbvVSsBv7KySbj4cBf',
+      'currency': 'USD',
+      'value': '100'
     }
   },
   {
-    "address": "r4nmQNH4Fhjfh6cHDbvVSsBv7KySbj4cBf",
-    "balance_change": {
-      "issuer": "",
-      "currency": "XRP",
-      "value": "-0.00001"
+    'address': 'r4nmQNH4Fhjfh6cHDbvVSsBv7KySbj4cBf',
+    'balance_change': {
+      'counterparty': 'rrnsYgWn13Z28GtRgznrSUsLfMkvsXCZSu',
+      'currency': 'USD',
+      'value': '-100'
     }
   },
   {
-    "address": "r4nmQNH4Fhjfh6cHDbvVSsBv7KySbj4cBf",
-    "balance_change": {
-      "issuer": "rJsaPnGdeo7BhMnHjuc3n44Mf7Ra1qkSVJ",
-      "currency": "USD",
-      "value": "-100"
+    'address': 'r4nmQNH4Fhjfh6cHDbvVSsBv7KySbj4cBf',
+    'balance_change': {
+      'counterparty': '',
+      'currency': 'XRP',
+      'value': '-0.00001'
     }
   },
   {
-    "address": "r4nmQNH4Fhjfh6cHDbvVSsBv7KySbj4cBf",
-    "balance_change": {
-      "issuer": "rGpeQzUWFu4fMhJHZ1Via5aqFC3A5twZUD",
-      "currency": "USD",
-      "value": "-100"
+    'address': 'rJsaPnGdeo7BhMnHjuc3n44Mf7Ra1qkSVJ',
+    'balance_change': {
+      'counterparty': 'r4nmQNH4Fhjfh6cHDbvVSsBv7KySbj4cBf',
+      'currency': 'USD',
+      'value': '100'
     }
   },
   {
-    "address": "rnYDWQaRdMb5neCGgvFfhw3MBoxmv5LtfH",
-    "balance_change": {
-      "issuer": "rJsaPnGdeo7BhMnHjuc3n44Mf7Ra1qkSVJ",
-      "currency": "USD",
-      "value": "100"
+    'address': 'r4nmQNH4Fhjfh6cHDbvVSsBv7KySbj4cBf',
+    'balance_change': {
+      'counterparty': 'rJsaPnGdeo7BhMnHjuc3n44Mf7Ra1qkSVJ',
+      'currency': 'USD',
+      'value': '-100'
     }
   },
   {
-    "address": "rnYDWQaRdMb5neCGgvFfhw3MBoxmv5LtfH",
-    "balance_change": {
-      "issuer": "rrnsYgWn13Z28GtRgznrSUsLfMkvsXCZSu",
-      "currency": "USD",
-      "value": "100"
+    'address': 'rGpeQzUWFu4fMhJHZ1Via5aqFC3A5twZUD',
+    'balance_change': {
+      'counterparty': 'r4nmQNH4Fhjfh6cHDbvVSsBv7KySbj4cBf',
+      'currency': 'USD',
+      'value': '100'
     }
   },
   {
-    "address": "rnYDWQaRdMb5neCGgvFfhw3MBoxmv5LtfH",
-    "balance_change": {
-      "issuer": "rGpeQzUWFu4fMhJHZ1Via5aqFC3A5twZUD",
-      "currency": "USD",
-      "value": "100"
+    'address': 'r4nmQNH4Fhjfh6cHDbvVSsBv7KySbj4cBf',
+    'balance_change': {
+      'counterparty': 'rGpeQzUWFu4fMhJHZ1Via5aqFC3A5twZUD',
+      'currency': 'USD',
+      'value': '-100'
+    }
+  },
+  {
+    'address': 'rnYDWQaRdMb5neCGgvFfhw3MBoxmv5LtfH',
+    'balance_change': {
+      'counterparty': 'rJsaPnGdeo7BhMnHjuc3n44Mf7Ra1qkSVJ',
+      'currency': 'USD',
+      'value': '100'
+    }
+  },
+  {
+    'address': 'rJsaPnGdeo7BhMnHjuc3n44Mf7Ra1qkSVJ',
+    'balance_change': {
+      'counterparty': 'rnYDWQaRdMb5neCGgvFfhw3MBoxmv5LtfH',
+      'currency': 'USD',
+      'value': '-100'
+    }
+  },
+  {
+    'address': 'rrnsYgWn13Z28GtRgznrSUsLfMkvsXCZSu',
+    'balance_change': {
+      'counterparty': 'rnYDWQaRdMb5neCGgvFfhw3MBoxmv5LtfH',
+      'currency': 'USD',
+      'value': '-100'
+    }
+  },
+  {
+    'address': 'rnYDWQaRdMb5neCGgvFfhw3MBoxmv5LtfH',
+    'balance_change': {
+      'counterparty': 'rrnsYgWn13Z28GtRgznrSUsLfMkvsXCZSu',
+      'currency': 'USD',
+      'value': '100'
+    }
+  },
+  {
+    'address': 'rnYDWQaRdMb5neCGgvFfhw3MBoxmv5LtfH',
+    'balance_change': {
+      'counterparty': 'rGpeQzUWFu4fMhJHZ1Via5aqFC3A5twZUD',
+      'currency': 'USD',
+      'value': '100'
+    }
+  },
+  {
+    'address': 'rGpeQzUWFu4fMhJHZ1Via5aqFC3A5twZUD',
+    'balance_change': {
+      'counterparty': 'rnYDWQaRdMb5neCGgvFfhw3MBoxmv5LtfH',
+      'currency': 'USD',
+      'value': '-100'
     }
   }
 ];
