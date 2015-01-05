@@ -1,7 +1,7 @@
 {
-  "name": "ripple-lib-extensions",
+  "name": "ripple-lib-balancechanges",
   "version": "0.1.0",
-  "description": "Optional extensions to ripple-lib",
+  "description": "Function to compute all balance changes resulting from a given transaction, based on the transaction's metadata",
   "scripts": {
     "test": "NODE_ENV=test ./node_modules/.bin/istanbul test ./node_modules/.bin/_mocha -- --reporter spec test/*-test.js",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
@@ -10,16 +10,15 @@
     "type": "git",
     "url": "https://github.com/ripple/ripple-lib-extensions.git"
   },
-  "main": "src/index.js",
+  "main": "src/balancechanges.js",
   "files": [
-    "src/index.js",
     "src/balancechanges.js",
     "src/utils.js"
   ],
   "keywords": [
     "ripple",
     "ripple-lib",
-    "ripple-lib-extensions"
+    "ripple-lib-balancechanges"
   ],
   "engines": {
     "node": ">=0.10.0"
@@ -31,6 +30,7 @@
   "devDependencies": {
     "coveralls": "~2.10.0",
     "istanbul": "^0.2.10",
+    "assert-diff": "*",
     "mocha": "*"
   }
 }

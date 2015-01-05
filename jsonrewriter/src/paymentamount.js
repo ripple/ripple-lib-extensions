@@ -1,6 +1,6 @@
 var _ = require('lodash');
 var BigNumber = require('bignumber.js');
-var parseBalanceChanges = require('./balancechanges').parseBalanceChanges;
+var parseBalanceChanges = require('ripple-lib-balancechanges').parseBalanceChanges;
 var sum = require('./utils').sum;
 var bignumify = require('./utils').bignumify;
 

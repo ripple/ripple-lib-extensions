@@ -60,6 +60,17 @@ function parseTrustlineBalanceChanges(node) {
   return [change, flipBalanceChange(change)];
 }
 
+function groupByAddress(balanceChanges) {
+  var grouped = _.groupBy(balanceChanges, function(change) {
+    return change.address;
+  });
+  return _.mapValues(grouped, function(group) {
+    return _.map(group, function(change) {
+      return change.balance_change;
+    });
+  });
+}
+
 /**
  * Computes the complete list of every balance that changed in the ledger
  * as a result of the given transaction.
@@ -74,7 +85,8 @@ function parseBalanceChanges(metadata) {
       return [ ];
     }
   });
-  return _.compact(_.flatten(balanceChanges));
+  return groupByAddress(_.compact(_.flatten(balanceChanges)));
 }
+
 
 module.exports.parseBalanceChanges = parseBalanceChanges;
