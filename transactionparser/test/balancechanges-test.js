@@ -1,6 +1,6 @@
 var assert = require('assert-diff');
 var fs = require('fs');
-var parseBalanceChanges = require('../src/balancechanges').parseBalanceChanges;
+var parseBalanceChanges = require('../src/index').parseBalanceChanges;
 
 // Pay 100 XRP from rKmB to rLDY to create rLDY account
 var createAccountBalanceChanges = {

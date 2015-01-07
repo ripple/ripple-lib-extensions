@@ -1,4 +1,5 @@
 ripple-lib-extensions
 =====================
 
-A collection of extensions to ripple-lib
+A collection of packages that extend the functionality of ripple-lib.
+
