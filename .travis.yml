@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+  - "0.10"
+env:
+  - PROJECT_DIR=jsonrewriter
+  - PROJECT_DIR=transactionparser
+script: cd $PROJECT_DIR && npm test
