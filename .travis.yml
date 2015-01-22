@@ -4,4 +4,4 @@ node_js:
 env:
   - PROJECT_DIR=jsonrewriter
   - PROJECT_DIR=transactionparser
-script: cd $PROJECT_DIR && npm test
+script: cd $PROJECT_DIR && npm install && npm test
