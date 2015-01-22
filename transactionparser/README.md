@@ -2,6 +2,8 @@
 ripple-lib-transactionparser
 ----------------------------
 
+[![NPM](https://nodei.co/npm/ripple-lib-transactionparser.png)](https://www.npmjs.org/package/ripple-lib-transactionparser)
+
 Parses transaction objects to a higher-level view.
 
 ### parseBalanceChanges(metadata)
