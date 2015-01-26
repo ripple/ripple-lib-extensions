@@ -1,3 +1,4 @@
+var BigNumber = require('bignumber.js');
 
 // drops is a bignumber.js BigNumber
 function dropsToXRP(drops) {
@@ -23,5 +24,22 @@ function normalizeNodes(metadata) {
   return metadata.AffectedNodes.map(normalizeNode);
 }
 
+function parseCurrencyAmount(currencyAmount) {
+  if (typeof currencyAmount === 'string') {
+    return {
+      currency: 'XRP',
+      counterparty: '',
+      value: dropsToXRP(new BigNumber(currencyAmount)).toString()
+    };
+  }
+
+  return {
+    currency: currencyAmount.currency,
+    counterparty: currencyAmount.issuer,
+    value: currencyAmount.value
+  };
+}
+
 module.exports.dropsToXRP = dropsToXRP;
 module.exports.normalizeNodes = normalizeNodes;
+module.exports.parseCurrencyAmount = parseCurrencyAmount;
