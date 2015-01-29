@@ -3,17 +3,30 @@ var BigNumber = require('bignumber.js');
 var normalizeNodes = require('./utils').normalizeNodes;
 var dropsToXRP = require('./utils').dropsToXRP;
 
+function parseBalance(balance) {
+  return new BigNumber(balance.value || balance);
+}
+
+function computeBalanceChange(node) {
+  if (node.newFields.Balance) {
+    return parseBalance(node.newFields.Balance)
+  } else if(node.previousFields.Balance && node.finalFields.Balance) {
+    return parseBalance(node.finalFields.Balance).minus(
+      parseBalance(node.previousFields.Balance));
+  } else {
+    return new BigNumber(0);
+  }
+}
 
 function parseXRPBalanceChange(node) {
-  if (!node.finalFields.Balance) {
+  var balanceChange = computeBalanceChange(node);
+
+  if(balanceChange.isZero()) {
     return null;
   }
-  var finalBalance = new BigNumber(node.finalFields.Balance);
-  var previousBalance = new BigNumber(node.previousFields.Balance || 0);
-  var balanceChange = finalBalance.minus(previousBalance);
 
   return {
-    address: node.finalFields.Account,
+    address: node.finalFields.Account || node.newFields.Account,
     balance_change: {
       counterparty: '',
       currency: 'XRP',
@@ -35,24 +48,16 @@ function flipBalanceChange(change) {
 }
 
 function parseTrustlineBalanceChanges(node) {
-  if (!_.isEmpty(node.finalFields) && !node.previousFields.Balance) {
-    return null;    // setting a trustline limit, no balance change
-  }
-  var highAccount = node.finalFields.HighLimit.issuer;
-  var lowAccount = node.finalFields.LowLimit.issuer;
-  var finalBalance = new BigNumber(node.finalFields.Balance.value);
-  var previousBalance = node.previousFields.Balance ?
-    new BigNumber(node.previousFields.Balance.value) : new BigNumber(0);
-  var balanceChange = finalBalance.minus(previousBalance);
+  var balanceChange = computeBalanceChange(node);
 
   if(balanceChange.isZero()) {
     return null;
   }
   // the balance is always from low node's perspective
   var change = {
-    address: lowAccount,
+    address: node.finalFields.LowLimit.issuer,
     balance_change: {
-      counterparty: highAccount,
+      counterparty: node.finalFields.HighLimit.issuer,
       currency: node.finalFields.Balance.currency,
       value: balanceChange.toString()
     }

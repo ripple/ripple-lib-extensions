@@ -99,6 +99,16 @@ var setTrustlineBalanceChanges = {
   ]
 };
 
+var setTrustlineBalanceChanges2 = {
+  rsApBGKJmMfExxZBrGnzxEXyq7TMhMRg4e: [
+    {
+      counterparty: '',
+      currency: 'XRP',
+      value: '-0.00001'
+    }
+  ]
+};
+
 // Set trust limit to 100 USD on rLDY when it has no trustline
 var createTrustlineBalanceChanges = setTrustlineBalanceChanges;
 
@@ -272,6 +282,11 @@ describe('parseBalanceChanges', function() {
     var paymentResponse = loadFixture('trustline-set-limit.json');
     var result = parseBalanceChanges(paymentResponse.metadata);
     assert.deepEqual(result, setTrustlineBalanceChanges);
+  });
+  it('Set trustline 2', function() {
+    var paymentResponse = loadFixture('trustline-set-limit-2.json');
+    var result = parseBalanceChanges(paymentResponse.metadata);
+    assert.deepEqual(result, setTrustlineBalanceChanges2);
   });
   it('Delete trustline', function() {
     var paymentResponse = loadFixture('trustline-delete.json');
