@@ -35,7 +35,7 @@ function parseOrderbookChange(node) {
       changeAmount = utils.parseCurrencyAmount(node.finalFields[type]);
       changeAmount.value = '0';
     } else if (status === 'created') {
-      changeAmount = utils.parseCurrencyAmount(node.finalFields[type]);
+      changeAmount = utils.parseCurrencyAmount(node.newFields[type]);
     } else {
       var finalAmount;
       changeAmount = finalAmount = utils.parseCurrencyAmount(node.finalFields[type]);
@@ -51,10 +51,10 @@ function parseOrderbookChange(node) {
   }
 
   return {
-    account: node.finalFields.Account,
+    account: node.finalFields.Account || node.newFields.Account,
     taker_pays: parseChangeAmount(node, 'TakerPays'),
     taker_gets: parseChangeAmount(node, 'TakerGets'),
-    sequence: node.finalFields.Sequence,
+    sequence: node.finalFields.Sequence || node.newFields.Sequence,
     status: parseOrderStatus(node)
   };
 }

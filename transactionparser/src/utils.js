@@ -12,7 +12,8 @@ function normalizeNode(affectedNode) {
     diffType: diffType,
     entryType: node.LedgerEntryType,
     ledgerIndex: node.LedgerIndex,
-    finalFields: node.FinalFields || node.NewFields || {},
+    newFields: node.NewFields || {},
+    finalFields: node.FinalFields || {},
     previousFields: node.PreviousFields || {}
   };
 }
