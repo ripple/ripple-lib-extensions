@@ -1,0 +1,31 @@
+env:
+  browser: true
+  node: true
+  mocha: true
+rules:
+  no-reserved-keys: 1   # ok in es5, dangerous in es3
+  block-scoped-var: 2
+  no-eq-null: 2
+  no-self-compare: 2
+  no-void: 2
+  brace-style: 2
+  camelcase: 0     # too many violations to switch this on now
+  comma-style: 2
+  consistent-this: [2, 'self']
+  no-underscore-dangle: 0     # used for private methods
+  quotes: [2, 'single']
+  space-after-keywords: 2
+  space-before-blocks: 2
+  space-in-brackets: 2
+  space-in-parens: 2
+  spaced-line-comment: 2
+  max-depth: [1, 4]
+  max-len: [1, 80]
+  max-params: [1, 4]
+  #no-var: 2    # force use of let or const... coming soon!! (es6)
+ecmaFeatures:
+  blockBindings: true
+  defaultParams: true
+  forOf: true
+  generators: true
+  jsx: true
