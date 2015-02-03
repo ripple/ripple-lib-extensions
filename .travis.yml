@@ -4,4 +4,9 @@ node_js:
 env:
   # - PROJECT_DIR=jsonrewriter
   - PROJECT_DIR=transactionparser
-script: cd $PROJECT_DIR && npm install && npm test
+before_install:
+  - cd $PROJECT_DIR
+before_script:
+  - npm install -g eslint
+  - eslint -c ./eslintrc $(git --no-pager diff --name-only --relative FETCH_HEAD $(git merge-base FETCH_HEAD origin/HEAD) | grep "\.js$")
+script: npm test
