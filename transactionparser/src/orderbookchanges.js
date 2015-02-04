@@ -2,7 +2,7 @@ var _ = require('lodash');
 var utils = require('./utils');
 var BigNumber = require('bignumber.js');
 
-function parseOrderbookChange(node) {
+function parseOrderChange(node) {
 
   function parseOrderStatus(node) {
     // Create an Offer
@@ -50,31 +50,43 @@ function parseOrderbookChange(node) {
     return changeAmount;
   }
 
-  return {
-    account: node.finalFields.Account || node.newFields.Account,
+  var orderChange = {
     taker_pays: parseChangeAmount(node, 'TakerPays'),
     taker_gets: parseChangeAmount(node, 'TakerGets'),
     sequence: node.finalFields.Sequence || node.newFields.Sequence,
     status: parseOrderStatus(node)
   };
+
+  Object.defineProperty(orderChange, 'account', {
+    value: node.finalFields.Account || node.newFields.Account,
+  });
+
+  return orderChange;
+}
+
+function groupByAddress(orderChanges) {
+  return _.groupBy(orderChanges, function(change) {
+    return change.account;
+  });
 }
 
 /**
  * Computes the complete list of every Offer that changed in the ledger
  * as a result of the given transaction.
+ * Returns changes grouped by Ripple account.
  *
  *  @param {Object} metadata - Transaction metadata as return by ripple-lib
- *  @returns {Array.<Object>} - Orderbook changes as an array
+ *  @returns {Object} - Orderbook changes grouped by Ripple account
  *
  */
-function parseOrderbookChanges(metadata) {
+exports.parseOrderBookChanges = function parseOrderBookChanges(metadata) {
   var nodes = utils.normalizeNodes(metadata);
 
-  return _.map(_.filter(nodes, function(node) {
+  var orderChanges = _.map(_.filter(nodes, function(node) {
     return node.entryType === 'Offer';
-  }), parseOrderbookChange);
+  }), parseOrderChange);
 
+  return groupByAddress(orderChanges);
 }
 
 
-module.exports.parseOrderbookChanges = parseOrderbookChanges;

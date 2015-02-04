@@ -26,25 +26,26 @@ where `BALANCECHANGE` is a javascript object in the following format:
 }
 ```
 
-The keys in this object are the Ripple addresses whose balances have changed and the values are arrays of objects that represent the balance changes. Each balance change has a counterparty, which is the opposite party on the trustline, except for XRP, where the counterparty is set to the empty string.
+The keys in this object are the Ripple [addresses](https://wiki.ripple.com/Accounts) whose balances have changed and the values are arrays of objects that represent the balance changes. Each balance change has a counterparty, which is the opposite party on the trustline, except for XRP, where the counterparty is set to the empty string.
 
 The `CURRENCYSTRING` is 'XRP' for XRP, a 3-letter ISO currency code, or a 160-bit hex string in the [Currency format](https://wiki.ripple.com/Currency_format).
 
-### parseOrderbookChanges(metadata)
+
+### parseOrderBookChanges(metadata)
 
 Takes a transaction metadata object and computes the changes in the order book caused by the transaction. Changes in the orderbook are analogous to changes in [`Offer` entries](https://wiki.ripple.com/Ledger_Format#Offer) in the ledger.
 
-The return value is a javascript array in the following format:
+
+The return value is a javascript object in the following format:
 
 ```javascript
-[ ORDERBOOK_CHANGE, ORDERBOOK_CHANGE ... ]
+{ RIPPLEADDRESS: [ORDERCHANGE, ...], ... }
 ```
 
-where `ORDERBOOK_CHANGE` is a javascript object with the following format:
+where `ORDERCHANGE` is a javascript object with the following format:
 
 ```javascript
 {
-    account: RIPPLEADDRESS,
     taker_pays: {
         currency: CURRENCYSTRING,
         counterparty: RIPPLEADDRESS,
@@ -60,7 +61,11 @@ where `ORDERBOOK_CHANGE` is a javascript object with the following format:
 }
 ```
 
+
+The keys in this object are the Ripple [addresses](https://wiki.ripple.com/Accounts) whose orders have changed and the values are arrays of objects that represent the order changes. 
+
 The `SEQUENCE` is the sequence number of the transaction that created that create the orderbook change. (See: https://wiki.ripple.com/Ledger_Format#Offer)
+The `CURRENCYSTRING` is 'XRP' for XRP, a 3-letter ISO currency code, or a 160-bit hex string in the [Currency format](https://wiki.ripple.com/Currency_format).
 
 The `ORDER_STATUS` is a string that represents the status of the order in the ledger:
 
@@ -68,4 +73,3 @@ The `ORDER_STATUS` is a string that represents the status of the order in the le
 *   `"open"`: The transaction modified the order (i.e., the order was partially consumed). The values of `taker_pays` and `taker_gets` represent the change in value of the order.
 *   `"closed"`: The transaction consumed the order. The values of `taker_pays` and `taker_gets` represent the change in value of the order.
 *   `"canceled"`: The transaction canceled the order. The values of `taker_pays` and `taker_gets` is zero.
-
