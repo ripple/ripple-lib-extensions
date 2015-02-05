@@ -53,12 +53,20 @@ function parseTrustlineBalanceChanges(node) {
   if(balanceChange.isZero()) {
     return null;
   }
+
+  /*
+   * A trustline can be created with a non-zero starting balance
+   * If an offer is placed to acquire an asset with no existing trustline,
+   * the trustline can be created when the ofer is taken.
+   */
+  var fields = _.isEmpty(node.newFields) ? node.finalFields : node.newFields;
+
   // the balance is always from low node's perspective
   var change = {
-    address: node.finalFields.LowLimit.issuer,
+    address: fields.LowLimit.issuer,
     balance_change: {
-      counterparty: node.finalFields.HighLimit.issuer,
-      currency: node.finalFields.Balance.currency,
+      counterparty: fields.HighLimit.issuer,
+      currency: fields.Balance.currency,
       value: balanceChange.toString()
     }
   };

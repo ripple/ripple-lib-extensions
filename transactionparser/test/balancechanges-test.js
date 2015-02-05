@@ -109,8 +109,29 @@ var setTrustlineBalanceChanges2 = {
   ]
 };
 
-// Set trust limit to 100 USD on rLDY when it has no trustline
-var createTrustlineBalanceChanges = setTrustlineBalanceChanges;
+// Set trust limit to 100 USD with balance of 10 USD on rLDY when it has no trustline
+var createTrustlineBalanceChanges = {
+  rLDYrujdKUfVx28T9vRDAbyJ7G2WVXKo4K: [
+    {
+      counterparty: "rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q",
+      currency: "USD",
+      value: "10"
+    },
+    {
+      counterparty: "",
+      currency: "XRP",
+      value: "-0.012"
+    }
+  ],
+  rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q: [
+    {
+      counterparty: "rLDYrujdKUfVx28T9vRDAbyJ7G2WVXKo4K",
+      currency: "USD",
+      value: "-10"
+    }
+  ]
+};
+
 
 // Pay 0.02 USD from rLDY to rKmB when rLDY has a trust limit of 0
 // for USD, but still has a balance of 0.02 USD; which closes the trustline

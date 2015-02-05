@@ -47,7 +47,7 @@
             "Balance": {
               "currency": "USD",
               "issuer": "rrrrrrrrrrrrrrrrrrrrBZbvji",
-              "value": "0"
+              "value": "10"
             },
             "Flags": 65536,
             "HighLimit": {
