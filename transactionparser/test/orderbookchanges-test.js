@@ -20,4 +20,10 @@ describe('parseOrderBookChanges', function() {
     var parsed = fixtures.parsedOfferCancel();
     assert.deepEqual(parsed, parseOrderBookChanges(meta));
   });
+
+  it('parse OfferCreate -- consumed offer, no changes to TakerGets', function() {
+    var meta = fixtures.offerCreateNoChangeTakerGets().meta;
+    var parsed = fixtures.parsedOfferCreateNoChangeTakerGets();
+    assert.deepEqual(parsed, parseOrderBookChanges(meta));
+  });
 });

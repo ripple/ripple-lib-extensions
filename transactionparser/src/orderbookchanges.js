@@ -40,11 +40,15 @@ function parseOrderChange(node) {
       var finalAmount;
       changeAmount = finalAmount = utils.parseCurrencyAmount(node.finalFields[type]);
 
-      var previousAmount = utils.parseCurrencyAmount(node.previousFields[type]);
-      var finalValue = new BigNumber(finalAmount.value);
-      var prevValue = new BigNumber(previousAmount.value);
-
-      changeAmount.value = finalValue.minus(prevValue).toString();
+      if (node.previousFields[type]) {
+        var previousAmount = utils.parseCurrencyAmount(node.previousFields[type]);
+        var finalValue = new BigNumber(finalAmount.value);
+        var prevValue = previousAmount ? new BigNumber(previousAmount.value) : 0;
+        changeAmount.value = finalValue.minus(prevValue).toString();
+      } else {
+        // There is no previousField -- change must be zero
+        changeAmount.value = '0';
+      }
     }
 
     return changeAmount;
