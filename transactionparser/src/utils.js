@@ -29,7 +29,6 @@ function parseCurrencyAmount(currencyAmount) {
   if (typeof currencyAmount === 'string') {
     return {
       currency: 'XRP',
-      counterparty: '',
       value: dropsToXRP(new BigNumber(currencyAmount)).toString()
     };
   }

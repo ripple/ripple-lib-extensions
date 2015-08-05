@@ -2,6 +2,23 @@ var _ = require('lodash');
 var utils = require('./utils');
 var BigNumber = require('bignumber.js');
 
+var SELL_FLAG = 0x00020000;
+
+function convertOrderChange(order) {
+  const takerGets = order.taker_gets;
+  const takerPays = order.taker_pays;
+  const direction = order.sell ? 'sell' : 'buy';
+  const quantity = (direction === 'buy') ? takerPays : takerGets;
+  const totalPrice = (direction === 'buy') ? takerGets : takerPays;
+  return {
+    direction: direction,
+    quantity: quantity,
+    totalPrice: totalPrice,
+    sequence: order.sequence,
+    status: order.status
+  };
+}
+
 function parseOrderChange(node) {
 
   function parseOrderStatus(node) {
@@ -54,12 +71,13 @@ function parseOrderChange(node) {
     return changeAmount;
   }
 
-  var orderChange = {
+  var orderChange = convertOrderChange({
     taker_pays: parseChangeAmount(node, 'TakerPays'),
     taker_gets: parseChangeAmount(node, 'TakerGets'),
+    sell: (node.finalFields.Flags & SELL_FLAG) !== 0,
     sequence: node.finalFields.Sequence || node.newFields.Sequence,
     status: parseOrderStatus(node)
-  };
+  });
 
   Object.defineProperty(orderChange, 'account', {
     value: node.finalFields.Account || node.newFields.Account,

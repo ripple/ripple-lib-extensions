@@ -929,14 +929,14 @@ exports.parsedOfferCreateNoChangeTakerGets = function() {
   return {
     rDqQUzKUXWgcJbzwjrGw1fZvGEN5dffQYr: [
       {
-        taker_pays: {
+        direction: 'sell',
+        totalPrice: {
           currency: 'BTC',
           counterparty: 'rG6FZ31hDHN1K5Dkbma3PSB5uVCuVVRzfn',
           value: '-2.841e-12'
         },
-        taker_gets: {
+        quantity: {
           currency: 'XRP',
-          counterparty: '',
           value: '0'
         },
         sequence: 4727,
@@ -945,12 +945,13 @@ exports.parsedOfferCreateNoChangeTakerGets = function() {
     ],
     rK5j9n8baXfL4gzUoZsfxBvvsv97P5swaV: [
       {
-        taker_pays: {
+        direction: 'buy',
+        quantity: {
           currency: 'BTC',
           counterparty: 'rG6FZ31hDHN1K5Dkbma3PSB5uVCuVVRzfn',
           value: '-0.108459249767'
         },
-        taker_gets: {
+        totalPrice: {
           currency: 'CNY',
           counterparty: 'rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK',
           value: '-193.198664968391'
@@ -966,12 +967,13 @@ exports.parsedOfferCreate = function () {
   return {
     "r49y2xKuKVG2dPkNHgWQAV61cjxk8gryjQ": [
       {
-        "taker_pays": {
+        'direction': 'buy',
+        "quantity": {
           "currency": "BTC",
           "counterparty": "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",
           "value": "-1.35836e-11"
         },
-        "taker_gets": {
+        "totalPrice": {
           "currency": "USD",
           "counterparty": "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",
           "value": "-3.6076e-9"
@@ -982,12 +984,13 @@ exports.parsedOfferCreate = function () {
     ],
     "rQE5Z3FgVnRMbVfS6xiVQFgB4J3X162FVD": [
       {
-        "taker_pays": {
+        'direction': 'buy',
+        "quantity": {
           "currency": "BTC",
           "counterparty": "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",
           "value": "-0.2167361918696212"
         },
-        "taker_gets": {
+        "totalPrice": {
           "currency": "USD",
           "counterparty": "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",
           "value": "-57.5510124870203"
@@ -1003,12 +1006,12 @@ exports.parsedOfferCreateCreated = function() {
   return {
     "rEQWVz1qN4DWw5J17s3DgXQzUuVYDSpK6M": [
       {
-        "taker_pays": {
+        'direction': 'buy',
+        "quantity": {
           "currency": "XRP",
-          "counterparty": "",
           "value": "10000000"
         },
-        "taker_gets": {
+        "totalPrice": {
           "currency": "JPY",
           "counterparty": "r94s8px6kSw1uZ1MV98dhSRTvc6VMPoPcN",
           "value": "0.0001"
@@ -1024,12 +1027,12 @@ exports.parsedOfferCancel = function () {
   return {
     "rEQWVz1qN4DWw5J17s3DgXQzUuVYDSpK6M": [
       {
-        "taker_pays": {
+        'direction': 'buy',
+        "quantity": {
           "currency": "XRP",
-          "counterparty": "",
           "value": "0"
         },
-        "taker_gets": {
+        "totalPrice": {
           "currency": "JPY",
           "counterparty": "r94s8px6kSw1uZ1MV98dhSRTvc6VMPoPcN",
           "value": "0"
