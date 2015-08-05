@@ -2,7 +2,7 @@ var _ = require('lodash');
 var utils = require('./utils');
 var BigNumber = require('bignumber.js');
 
-var SELL_FLAG = 0x00020000;
+var lsfSell = 0x00020000;   // see "lsfSell" flag in rippled source code
 
 function convertOrderChange(order) {
   const takerGets = order.taker_gets;
@@ -74,7 +74,7 @@ function parseOrderChange(node) {
   var orderChange = convertOrderChange({
     taker_pays: parseChangeAmount(node, 'TakerPays'),
     taker_gets: parseChangeAmount(node, 'TakerGets'),
-    sell: (node.finalFields.Flags & SELL_FLAG) !== 0,
+    sell: (node.finalFields.Flags & lsfSell) !== 0,
     sequence: node.finalFields.Sequence || node.newFields.Sequence,
     status: parseOrderStatus(node)
   });
@@ -101,7 +101,7 @@ function groupByAddress(orderChanges) {
  *  @returns {Object} - Orderbook changes grouped by Ripple account
  *
  */
-exports.parseOrderBookChanges = function parseOrderBookChanges(metadata) {
+exports.parseOrderbookChanges = function parseOrderbookChanges(metadata) {
   var nodes = utils.normalizeNodes(metadata);
 
   var orderChanges = _.map(_.filter(nodes, function(node) {
