@@ -1,0 +1,44 @@
+{
+  "name": "ripple-lib-value",
+  "version": "0.1.0",
+  "license": "ISC",
+  "description": "Classes for dealing with Ripple amount values",
+  "files": [
+    "dist/npm/*",
+    "test/*"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist/npm && rm -rf build/flow",
+    "typecheck": "babel --optional runtime --blacklist flow -d build/flow/ src/ && flow check",
+    "compile": "babel -D --optional runtime -d dist/npm/ src/",
+    "prepublish": "npm run clean && npm run compile",
+    "test": "istanbul test _mocha",
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "lint": "if ! [ -f eslintrc ]; then curl -o eslintrc 'https://raw.githubusercontent.com/ripple/javascript-style-guide/es6/eslintrc'; echo 'parser: babel-eslint' >> eslintrc; fi; eslint -c eslintrc src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ripple/ripple-lib-extensions.git"
+  },
+  "main": "dist/npm/",
+  "keywords": [
+    "ripple",
+    "ripple-lib",
+    "ripple-lib-value"
+  ],
+  "engines": {
+    "node": ">=0.12.0"
+  },
+  "dependencies": {
+    "babel-runtime": "^5.5.4",
+    "bignumber.js": "~2.0.3"
+  },
+  "devDependencies": {
+    "babel": "^5.8.21",
+    "babel-core": "^5.8.22",
+    "babel-eslint": "^4.0.5",
+    "flow-bin": "^0.14",
+    "istanbul": "^0.3.5",
+    "mocha": "^2.1.0"
+  }
+}
