@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var BigNumber = require('bignumber.js');
 
 // drops is a bignumber.js BigNumber
@@ -40,6 +41,35 @@ function parseCurrencyAmount(currencyAmount) {
   };
 }
 
-module.exports.dropsToXRP = dropsToXRP;
-module.exports.normalizeNodes = normalizeNodes;
-module.exports.parseCurrencyAmount = parseCurrencyAmount;
+function isAccountField(fieldName) {
+  var fieldNames = ['Account', 'Owner', 'Destination', 'Issuer', 'Target'];
+  return _.includes(fieldNames, fieldName);
+}
+
+function isAmountFieldAffectingIssuer(fieldName) {
+  var fieldNames = ['LowLimit', 'HighLimit', 'TakerPays', 'TakerGets'];
+  return _.includes(fieldNames, fieldName);
+}
+
+function getAffectedAccounts(metadata) {
+  var accounts = [];
+  _.forEach(normalizeNodes(metadata), function(node) {
+    var fields = node.diffType === 'CreatedNode' ?
+      node.newFields : node.finalFields;
+    _.forEach(fields, function(fieldValue, fieldName) {
+      if (isAccountField(fieldName)) {
+        accounts.push(fieldValue);
+      } else if (isAmountFieldAffectingIssuer(fieldName) && fieldValue.issuer) {
+        accounts.push(fieldValue.issuer);
+      }
+    });
+  });
+  return _.uniq(accounts);
+}
+
+module.exports = {
+  dropsToXRP: dropsToXRP,
+  normalizeNodes: normalizeNodes,
+  parseCurrencyAmount: parseCurrencyAmount,
+  getAffectedAccounts: getAffectedAccounts
+};
