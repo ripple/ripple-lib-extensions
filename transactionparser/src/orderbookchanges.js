@@ -1,22 +1,36 @@
+'use strict';
 var _ = require('lodash');
 var utils = require('./utils');
 var BigNumber = require('bignumber.js');
+var parseQuality = require('./quality');
 
 var lsfSell = 0x00020000;   // see "lsfSell" flag in rippled source code
 
 function convertOrderChange(order) {
-  const takerGets = order.taker_gets;
-  const takerPays = order.taker_pays;
-  const direction = order.sell ? 'sell' : 'buy';
-  const quantity = (direction === 'buy') ? takerPays : takerGets;
-  const totalPrice = (direction === 'buy') ? takerGets : takerPays;
+  var takerGets = order.taker_gets;
+  var takerPays = order.taker_pays;
+  var direction = order.sell ? 'sell' : 'buy';
+  var quantity = (direction === 'buy') ? takerPays : takerGets;
+  var totalPrice = (direction === 'buy') ? takerGets : takerPays;
   return {
     direction: direction,
     quantity: quantity,
     totalPrice: totalPrice,
     sequence: order.sequence,
-    status: order.status
+    status: order.status,
+    makerExchangeRate: order.quality
   };
+}
+
+function getQuality(node) {
+  var takerGets = node.finalFields.TakerGets || node.newFields.TakerGets;
+  var takerPays = node.finalFields.TakerPays || node.newFields.TakerPays;
+  var takerGetsCurrency = takerGets.currency || 'XRP';
+  var takerPaysCurrency = takerPays.currency || 'XRP';
+  var bookDirectory = node.finalFields.BookDirectory
+    || node.newFields.BookDirectory;
+  var qualityHex = bookDirectory.substring(bookDirectory.length - 16);
+  return parseQuality(qualityHex, takerGetsCurrency, takerPaysCurrency);
 }
 
 function parseOrderChange(node) {
@@ -48,19 +62,23 @@ function parseOrderChange(node) {
     var status = parseOrderStatus(node);
 
     if (status === 'canceled') {
-    // Canceled orders do not have PreviousFields and FinalFields have positive values
+      // Canceled orders do not have PreviousFields and FinalFields
+      // have positive values
       changeAmount = utils.parseCurrencyAmount(node.finalFields[type]);
       changeAmount.value = '0';
     } else if (status === 'created') {
       changeAmount = utils.parseCurrencyAmount(node.newFields[type]);
     } else {
       var finalAmount;
-      changeAmount = finalAmount = utils.parseCurrencyAmount(node.finalFields[type]);
+      changeAmount = finalAmount = utils.parseCurrencyAmount(
+        node.finalFields[type]);
 
       if (node.previousFields[type]) {
-        var previousAmount = utils.parseCurrencyAmount(node.previousFields[type]);
+        var previousAmount = utils.parseCurrencyAmount(
+          node.previousFields[type]);
         var finalValue = new BigNumber(finalAmount.value);
-        var prevValue = previousAmount ? new BigNumber(previousAmount.value) : 0;
+        var prevValue = previousAmount ?
+          new BigNumber(previousAmount.value) : 0;
         changeAmount.value = finalValue.minus(prevValue).toString();
       } else {
         // There is no previousField -- change must be zero
@@ -76,11 +94,12 @@ function parseOrderChange(node) {
     taker_gets: parseChangeAmount(node, 'TakerGets'),
     sell: (node.finalFields.Flags & lsfSell) !== 0,
     sequence: node.finalFields.Sequence || node.newFields.Sequence,
-    status: parseOrderStatus(node)
+    status: parseOrderStatus(node),
+    quality: getQuality(node)
   });
 
   Object.defineProperty(orderChange, 'account', {
-    value: node.finalFields.Account || node.newFields.Account,
+    value: node.finalFields.Account || node.newFields.Account
   });
 
   return orderChange;
@@ -109,6 +128,4 @@ exports.parseOrderbookChanges = function parseOrderbookChanges(metadata) {
   }), parseOrderChange);
 
   return groupByAddress(orderChanges);
-}
-
-
+};

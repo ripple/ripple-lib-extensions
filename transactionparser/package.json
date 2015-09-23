@@ -1,6 +1,6 @@
 {
   "name": "ripple-lib-transactionparser",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Parses transaction objects to a higher-level view",
   "scripts": {
     "test": "NODE_ENV=test ./node_modules/.bin/istanbul test ./node_modules/.bin/_mocha -- --reporter spec test/*-test.js",
@@ -21,12 +21,12 @@
     "node": ">=0.10.0"
   },
   "dependencies": {
-    "bignumber.js": "~1.4.0",
+    "bignumber.js": "^2.0.3",
     "lodash": "^3.10.1"
   },
   "devDependencies": {
     "assert-diff": "*",
-    "coveralls": "~2.10.0",
+    "coveralls": "^2.10.0",
     "eslint": "^0.13.0",
     "istanbul": "^0.2.10",
     "mocha": "*"

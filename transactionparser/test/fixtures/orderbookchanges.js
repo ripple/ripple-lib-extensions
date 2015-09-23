@@ -939,6 +939,7 @@ exports.parsedOfferCreateNoChangeTakerGets = function() {
           currency: 'XRP',
           value: '0'
         },
+        makerExchangeRate: '0.00002901',
         sequence: 4727,
         status: 'open'
       }
@@ -956,6 +957,7 @@ exports.parsedOfferCreateNoChangeTakerGets = function() {
           counterparty: 'rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK',
           value: '-193.198664968391'
         },
+        makerExchangeRate: '0.0005613871596097462',
         sequence: 5276219,
         status: 'closed'
       }
@@ -978,6 +980,7 @@ exports.parsedOfferCreate = function () {
           "counterparty": "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",
           "value": "-3.6076e-9"
         },
+        "makerExchangeRate": "0.003765060240963855",
         "sequence": 550,
         "status": "closed"
       }
@@ -995,6 +998,7 @@ exports.parsedOfferCreate = function () {
           "counterparty": "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",
           "value": "-57.5510124870203"
         },
+        "makerExchangeRate": "0.003765983994087028",
         "sequence": 114646,
         "status": "open"
       }
@@ -1016,6 +1020,7 @@ exports.parsedOfferCreateCreated = function() {
           "counterparty": "r94s8px6kSw1uZ1MV98dhSRTvc6VMPoPcN",
           "value": "0.0001"
         },
+        "makerExchangeRate": "100000000000",
         "sequence": 26,
         "status": "created"
       }
@@ -1037,6 +1042,7 @@ exports.parsedOfferCancel = function () {
           "counterparty": "r94s8px6kSw1uZ1MV98dhSRTvc6VMPoPcN",
           "value": "0"
         },
+        "makerExchangeRate": "1",
         "sequence": 20,
         "status": "canceled"
       }
