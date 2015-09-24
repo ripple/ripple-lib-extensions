@@ -57,6 +57,7 @@ where `ORDERCHANGE` is a javascript object with the following format:
         counterparty: RIPPLEADDRESS,  (omitted if currency is 'XRP')
         value: DECIMALSTRING
     },
+    makerExchangeRate: DECIMALSTRING,
     sequence: SEQUENCE,
     status: ORDER_STATUS
 }
@@ -67,6 +68,8 @@ The keys in this object are the Ripple [addresses](https://wiki.ripple.com/Accou
 
 The `SEQUENCE` is the sequence number of the transaction that created that create the orderbook change. (See: https://wiki.ripple.com/Ledger_Format#Offer)
 The `CURRENCYSTRING` is 'XRP' for XRP, a 3-letter ISO currency code, or a 160-bit hex string in the [Currency format](https://wiki.ripple.com/Currency_format).
+
+The `makerExchangeRate` field provides the original value of the ratio of what the taker pays over what the taker gets (also known as the "quality").
 
 The `ORDER_STATUS` is a string that represents the status of the order in the ledger:
 
