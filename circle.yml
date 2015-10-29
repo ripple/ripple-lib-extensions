@@ -1,0 +1,12 @@
+machine:
+  node:
+    version: 0.12.0
+test:
+  pre:
+    - cd transactionparser && npm install
+    #- cd value && npm install
+    #- cd messagesigner && npm install
+  override:
+    - cd transactionparser && ./ci.sh
+    #- cd value && npm test
+    #- cd messagesigner && npm test
