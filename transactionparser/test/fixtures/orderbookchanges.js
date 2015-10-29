@@ -933,7 +933,7 @@ exports.parsedOfferCreateNoChangeTakerGets = function() {
         totalPrice: {
           currency: 'BTC',
           counterparty: 'rG6FZ31hDHN1K5Dkbma3PSB5uVCuVVRzfn',
-          value: '-2.841e-12'
+          value: '2.841e-12'
         },
         quantity: {
           currency: 'XRP',
@@ -941,7 +941,7 @@ exports.parsedOfferCreateNoChangeTakerGets = function() {
         },
         makerExchangeRate: '0.00002901',
         sequence: 4727,
-        status: 'open'
+        status: 'partially-filled'
       }
     ],
     rK5j9n8baXfL4gzUoZsfxBvvsv97P5swaV: [
@@ -950,16 +950,16 @@ exports.parsedOfferCreateNoChangeTakerGets = function() {
         quantity: {
           currency: 'BTC',
           counterparty: 'rG6FZ31hDHN1K5Dkbma3PSB5uVCuVVRzfn',
-          value: '-0.108459249767'
+          value: '0.108459249767'
         },
         totalPrice: {
           currency: 'CNY',
           counterparty: 'rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK',
-          value: '-193.198664968391'
+          value: '193.198664968391'
         },
         makerExchangeRate: '0.0005613871596097462',
         sequence: 5276219,
-        status: 'closed'
+        status: 'filled'
       }
     ]
   };
@@ -973,16 +973,16 @@ exports.parsedOfferCreate = function () {
         "quantity": {
           "currency": "BTC",
           "counterparty": "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",
-          "value": "-1.35836e-11"
+          "value": "1.35836e-11"
         },
         "totalPrice": {
           "currency": "USD",
           "counterparty": "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",
-          "value": "-3.6076e-9"
+          "value": "3.6076e-9"
         },
         "makerExchangeRate": "0.003765060240963855",
         "sequence": 550,
-        "status": "closed"
+        "status": "filled"
       }
     ],
     "rQE5Z3FgVnRMbVfS6xiVQFgB4J3X162FVD": [
@@ -991,16 +991,16 @@ exports.parsedOfferCreate = function () {
         "quantity": {
           "currency": "BTC",
           "counterparty": "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",
-          "value": "-0.2167361918696212"
+          "value": "0.2167361918696212"
         },
         "totalPrice": {
           "currency": "USD",
           "counterparty": "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",
-          "value": "-57.5510124870203"
+          "value": "57.5510124870203"
         },
         "makerExchangeRate": "0.003765983994087028",
         "sequence": 114646,
-        "status": "open"
+        "status": "partially-filled"
       }
     ]
   };
@@ -1035,16 +1035,16 @@ exports.parsedOfferCancel = function () {
         'direction': 'buy',
         "quantity": {
           "currency": "XRP",
-          "value": "0"
+          "value": "1000"
         },
         "totalPrice": {
           "currency": "JPY",
           "counterparty": "r94s8px6kSw1uZ1MV98dhSRTvc6VMPoPcN",
-          "value": "0"
+          "value": "1000"
         },
         "makerExchangeRate": "1",
         "sequence": 20,
-        "status": "canceled"
+        "status": "cancelled"
       }
     ]
   };

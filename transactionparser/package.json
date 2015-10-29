@@ -1,6 +1,6 @@
 {
   "name": "ripple-lib-transactionparser",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Parses transaction objects to a higher-level view",
   "scripts": {
     "test": "NODE_ENV=test ./node_modules/.bin/istanbul test ./node_modules/.bin/_mocha -- --reporter spec test/*-test.js",
