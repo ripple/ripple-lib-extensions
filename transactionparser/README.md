@@ -59,7 +59,8 @@ where `ORDERCHANGE` is a javascript object with the following format:
     },
     makerExchangeRate: DECIMALSTRING,
     sequence: SEQUENCE,
-    status: ORDER_STATUS
+    status: ORDER_STATUS,
+    expirationTime: EXPIRATION_TIME   (omitted if there is no expiration time)
 }
 ```
 
@@ -74,6 +75,8 @@ The `makerExchangeRate` field provides the original value of the ratio of what t
 The `ORDER_STATUS` is a string that represents the status of the order in the ledger:
 
 *   `"created"`: The transaction created the order. The values of `quantity` and `totalPrice` represent the values of the order.
-*   `"open"`: The transaction modified the order (i.e., the order was partially consumed). The values of `quantity` and `totalPrice` represent the change in value of the order.
-*   `"closed"`: The transaction consumed the order. The values of `quantity` and `totalPrice` represent the change in value of the order.
-*   `"canceled"`: The transaction canceled the order. The values of `quantity` and `totalPrice` is zero.
+*   `"partially-filled"`: The transaction modified the order (i.e., the order was partially consumed). The values of `quantity` and `totalPrice` represent the absolute value of change in value of the order.
+*   `"filled"`: The transaction consumed the order. The values of `quantity` and `totalPrice` represent the absolute value of change in value of the order.
+*   `"cancelled"`: The transaction canceled the order. The values of `quantity` and `totalPrice` are the values of the order prior to cancellation.
+
+The `EXPIRATION_TIME` is an ISO 8601 timestamp representing the time at which the order expires (if there is an expiration time).

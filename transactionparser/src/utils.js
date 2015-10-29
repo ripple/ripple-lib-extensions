@@ -28,6 +28,9 @@ function normalizeNodes(metadata) {
 }
 
 function parseCurrencyAmount(currencyAmount) {
+  if (currencyAmount === undefined) {
+    return undefined;
+  }
   if (typeof currencyAmount === 'string') {
     return {
       currency: 'XRP',
