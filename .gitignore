@@ -1,2 +1,6 @@
 node_modules
 eslintrc
+orderbook/eslintrc
+orderbook/build/
+orderbook/dist/
+orderbook/node_modules/
