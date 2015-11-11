@@ -1,0 +1,12 @@
+[ignore]
+.*/orderbook/src/.*
+.*/test/fixtures/.*
+.*/node_modules/flow-bin/.*
+
+[include]
+./node_modules/
+
+[libs]
+
+[options]
+module.system=node

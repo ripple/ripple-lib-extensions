@@ -4,9 +4,12 @@ machine:
 test:
   pre:
     - cd transactionparser && npm install
+    - cd orderbook && npm install
     #- cd value && npm install
     #- cd messagesigner && npm install
   override:
     - cd transactionparser && ./ci.sh
+    - cd orderbook && ./ci.sh "$CIRCLE_NODE_INDEX" "$CIRCLE_NODE_TOTAL":
+         parallel: true
     #- cd value && npm test
     #- cd messagesigner && npm test
