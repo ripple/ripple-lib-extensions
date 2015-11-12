@@ -1,3 +1,4 @@
+/* @flow */
 
 'use strict';
 
@@ -20,6 +21,13 @@ function assertValidLegOneOffer(legOneOffer, message) {
 const ZERO_VALUE = new IOUValue('0');
 
 class AutobridgeCalculator {
+
+  _currencyGets: string;
+  _currencyPays: string;
+  _issuerGets: string;
+  _issuerPays: string;
+  legOneOffers: Array<Object>;
+  legTwoOffers: Array<Object>;
 
   _ownerFundsLeftover: { [key: string]: IOUValue };
 
@@ -60,8 +68,9 @@ class AutobridgeCalculator {
   }
 
   _calculateInternal(
-    legOnePointer_, legTwoPointer_, offersAutobridged, resolve
-  ) {
+    legOnePointer_: number, legTwoPointer_: number,
+    offersAutobridged: Array<Object>, resolve: (offers: Array<Object>) => void
+  ): void {
 
     let legOnePointer = legOnePointer_;
     let legTwoPointer = legTwoPointer_;
@@ -146,7 +155,8 @@ class AutobridgeCalculator {
    * @return {Object}
    */
 
-  _getAutobridgedOfferWithoutClamps(legOneOffer, legTwoOffer) {
+  _getAutobridgedOfferWithoutClamps(legOneOffer: Object, legTwoOffer: Object
+  ): Object {
     const autobridgedTakerGets = this._getOfferTakerGetsFunded(legTwoOffer);
     const autobridgedTakerPays = this._getOfferTakerPaysFunded(legOneOffer);
 
@@ -166,7 +176,9 @@ class AutobridgeCalculator {
    * @return {Object}
    */
 
-  _getAutobridgedOfferWithClampedLegTwo(legOneOffer, legTwoOffer) {
+  _getAutobridgedOfferWithClampedLegTwo(legOneOffer: Object,
+    legTwoOffer: Object
+  ): Object {
     const legOneTakerGetsFunded = this._getOfferTakerGetsFunded(legOneOffer);
     const legTwoTakerPaysFunded = this._getOfferTakerPaysFunded(legTwoOffer);
     const legTwoQuality = new IOUValue(legTwoOffer.quality);
@@ -200,7 +212,7 @@ class AutobridgeCalculator {
 
   _getAutobridgedOfferWithClampedLegOne(legOneOffer: Object,
     legTwoOffer: Object
-  ) {
+  ): Object {
     const legOneTakerGetsFunded = this._getOfferTakerGetsFunded(legOneOffer);
     const legTwoTakerPaysFunded = this._getOfferTakerPaysFunded(legTwoOffer);
     const legOneQuality = new IOUValue(legOneOffer.quality);
@@ -238,7 +250,7 @@ class AutobridgeCalculator {
    * @return {Object}
    */
 
-  _formatAutobridgedOffer(takerGets: IOUValue, takerPays: IOUValue) {
+  _formatAutobridgedOffer(takerGets: IOUValue, takerPays: IOUValue): Object {
     assert(takerGets instanceof IOUValue, 'Autobridged taker gets is invalid');
     assert(takerPays instanceof IOUValue, 'Autobridged taker pays is invalid');
 
@@ -285,7 +297,7 @@ class AutobridgeCalculator {
    * @param {Object} legOneOffer - IOU:XRP offer
    */
 
-  _clampLegOneOwnerFunds(legOneOffer: Object) {
+  _clampLegOneOwnerFunds(legOneOffer: Object): void {
     assertValidLegOneOffer(legOneOffer, 'Leg one offer is invalid');
 
     const takerGets = this._getOfferTakerGets(legOneOffer);
@@ -312,7 +324,7 @@ class AutobridgeCalculator {
    * @return {IOUValue}
    */
 
-  _addLeftoverOwnerFunds(account: string, amount: IOUValue) {
+  _addLeftoverOwnerFunds(account: string, amount: IOUValue): IOUValue {
     assert(amount instanceof IOUValue, 'Amount is invalid');
 
     this._ownerFundsLeftover[account] = this._getLeftoverOwnerFunds(account)
@@ -330,7 +342,7 @@ class AutobridgeCalculator {
    * @param {Object} legOneOffer - IOU:XRP offer
    */
 
-  _unclampLegOneOwnerFunds(legOneOffer: Object) {
+  _unclampLegOneOwnerFunds(legOneOffer: Object): void {
     assertValidLegOneOffer(legOneOffer, 'Leg one offer is invalid');
 
     legOneOffer.initTakerGetsFunded =
@@ -350,7 +362,7 @@ class AutobridgeCalculator {
    * @param {IOUValue} takerGets
    */
 
-  _setLegOneTakerGets(legOneOffer: Object, takerGets: IOUValue) {
+  _setLegOneTakerGets(legOneOffer: Object, takerGets: IOUValue): void {
     assertValidLegOneOffer(legOneOffer, 'Leg one offer is invalid');
     assert(takerGets instanceof IOUValue, 'Taker gets funded is invalid');
 
@@ -374,7 +386,8 @@ class AutobridgeCalculator {
    * @param {IOUValue} takerGetsFunded
    */
 
-  _setLegOneTakerGetsFunded(legOneOffer: Object, takerGetsFunded: IOUValue) {
+  _setLegOneTakerGetsFunded(legOneOffer: Object, takerGetsFunded: IOUValue
+  ): void {
     assertValidLegOneOffer(legOneOffer, 'Leg one offer is invalid');
     assert(takerGetsFunded instanceof IOUValue, 'Taker gets funded is invalid');
 
@@ -395,7 +408,7 @@ class AutobridgeCalculator {
    * @param {Object} legOneOffer - IOU:XRP offer
    */
 
-  _adjustLegOneFundedAmount(legOneOffer: Object) {
+  _adjustLegOneFundedAmount(legOneOffer: Object): void {
     assertValidLegOneOffer(legOneOffer, 'Leg one offer is invalid');
     assert(!legOneOffer.is_fully_funded,
       'Leg one offer cannot be fully funded');
@@ -439,7 +452,7 @@ class AutobridgeCalculator {
    * @param {IOUValue} amount
    */
 
-  _setLeftoverOwnerFunds(account: string, amount: IOUValue) {
+  _setLeftoverOwnerFunds(account: string, amount: IOUValue): void {
     assert(amount instanceof IOUValue, 'Amount is invalid');
 
     this._ownerFundsLeftover[account] = amount;
@@ -473,7 +486,7 @@ class AutobridgeCalculator {
     return new IOUValue(offer.taker_pays_funded);
   }
 
-  _getOfferTakerGets(offer: Object) {
+  _getOfferTakerGets(offer: Object): IOUValue {
     assert(typeof offer, 'object', 'Offer is invalid');
     return new IOUValue(Utils.getValueFromRippledAmount(offer.TakerGets));
   }
