@@ -94,8 +94,38 @@ class OrderBook extends EventEmitter {
   _ownerFunds: { [key: string]: string };
   _ownerOffersTotal: { [key: string]: Value };
   _validAccounts: { [key: string]: boolean };
-  _legOneBook: OrderBook;
-  _legTwoBook: OrderBook;
+  _validAccountsCount: number;
+  _offers: Array<Object>;
+  _mergedOffers: Array<Object>;
+  _offersAutobridged: Array<Object>;
+  _legOneBook: ?OrderBook;
+  _legTwoBook: ?OrderBook;
+  _key: string;
+  _api: Object;
+  _currencyGets: string;
+  _issuerGets: string;
+  _currencyPays: string;
+  _issuerPays: string;
+  _account: string;
+
+  _listeners: number;
+  _transactionsLeft: number;
+  _waitingForOffers: boolean;
+  _subscribed: boolean;
+  _synced: boolean;
+
+  _isAutobridgeable: boolean;
+
+  _issuerTransferRate: IOUValue;
+  _transferRateIsDefault: boolean;
+
+  _closedLedgerVersion: number;
+  _lastUpdateLedgerSequence: number;
+  _calculatorRunning: boolean;
+  _gotOffersFromLegOne: boolean;
+  _gotOffersFromLegTwo: boolean;
+
+  _trace: boolean;
 
   constructor(api: Object, currencyGets: string, issuerGets?: string,
     currencyPays: string, issuerPays?: string, account?: string, trace? = false
@@ -109,11 +139,11 @@ class OrderBook extends EventEmitter {
     }
 
     this._api = api;
-    this._account = account;
+    this._account = account !== undefined ? account : '';
     this._currencyGets = normalizeCurrency(currencyGets);
-    this._issuerGets = issuerGets;
+    this._issuerGets = issuerGets !== undefined ? issuerGets : '';
     this._currencyPays = normalizeCurrency(currencyPays);
-    this._issuerPays = issuerPays;
+    this._issuerPays = issuerPays !== undefined ? issuerPays : '';
     this._key = prepareTrade(currencyGets, issuerGets) + ':' +
                 prepareTrade(currencyPays, issuerPays);
 
@@ -147,7 +177,6 @@ class OrderBook extends EventEmitter {
     this._calculatorRunning = false;
     this._gotOffersFromLegOne = false;
     this._gotOffersFromLegTwo = false;
-    this._destroyed = false;
 
     if (this._isAutobridgeable) {
       this._legOneBook = new OrderBook(api, 'XRP', undefined,
@@ -187,12 +216,12 @@ class OrderBook extends EventEmitter {
    * @return {Boolean} is valid
    */
 
-  isValid() {
+  isValid(): boolean {
     // XXX Should check for same currency (non-native) && same issuer
     return (
-      this._currencyPays && isValidCurrency(this._currencyPays) &&
+      Boolean(this._currencyPays) && isValidCurrency(this._currencyPays) &&
       (this._currencyPays === 'XRP' || isValidAddress(this._issuerPays)) &&
-      this._currencyGets && isValidCurrency(this._currencyGets) &&
+      Boolean(this._currencyGets) && isValidCurrency(this._currencyGets) &&
       (this._currencyGets === 'XRP' || isValidAddress(this._issuerGets)) &&
       !(this._currencyPays === 'XRP' && this._currencyGets === 'XRP')
     );
@@ -207,7 +236,7 @@ class OrderBook extends EventEmitter {
    * @return {Array} offers
    */
 
-  getOffersSync() {
+  getOffersSync(): Array<Object> {
     return this._offers;
   }
 
@@ -229,8 +258,12 @@ class OrderBook extends EventEmitter {
       this._gotOffersFromLegOne = false;
       this._gotOffersFromLegTwo = false;
 
-      this._legOneBook.requestOffers();
-      this._legTwoBook.requestOffers();
+      if (this._legOneBook !== null && this._legOneBook !== undefined) {
+        this._legOneBook.requestOffers();
+      }
+      if (this._legTwoBook !== null && this._legTwoBook !== undefined) {
+        this._legTwoBook.requestOffers();
+      }
     }
 
     this._waitingForOffers = true;
@@ -314,11 +347,11 @@ class OrderBook extends EventEmitter {
       }
     }
 
-    function onLedgerClosedWrapper(message) {
+    function onLedgerClosedWrapper(message: Object) {
       self._onLedgerClosed(message);
     }
 
-    function listenersModified(action, event) {
+    function listenersModified(action: string, event: string) {
       // Automatically subscribe and unsubscribe to orderbook
       // on the basis of existing event listeners
       if (_.contains(EVENTS, event)) {
@@ -329,10 +362,16 @@ class OrderBook extends EventEmitter {
               self._api.on('ledgerClosed', onLedgerClosedWrapper);
 
               if (self._isAutobridgeable) {
-                self._legOneBook.on('model',
-                  computeAutobridgedOffersWrapperOne);
-                self._legTwoBook.on('model',
-                  computeAutobridgedOffersWrapperTwo);
+                if (self._legOneBook !== null && self._legOneBook !== undefined
+                ) {
+                  self._legOneBook.on('model',
+                    computeAutobridgedOffersWrapperOne);
+                }
+                if (self._legTwoBook !== null && self._legTwoBook !== undefined
+                ) {
+                  self._legTwoBook.on('model',
+                    computeAutobridgedOffersWrapperTwo);
+                }
               }
 
               self._subscribe(true);
@@ -346,10 +385,16 @@ class OrderBook extends EventEmitter {
               self._gotOffersFromLegTwo = false;
 
               if (self._isAutobridgeable) {
-                self._legOneBook.removeListener('model',
-                  computeAutobridgedOffersWrapperOne);
-                self._legTwoBook.removeListener('model',
-                  computeAutobridgedOffersWrapperTwo);
+                if (self._legOneBook !== null && self._legOneBook !== undefined
+                ) {
+                  self._legOneBook.removeListener('model',
+                    computeAutobridgedOffersWrapperOne);
+                }
+                if (self._legTwoBook !== null && self._legTwoBook !== undefined
+                ) {
+                  self._legTwoBook.removeListener('model',
+                    computeAutobridgedOffersWrapperTwo);
+                }
               }
               self._subscribe(false);
 
@@ -402,7 +447,7 @@ class OrderBook extends EventEmitter {
     }
   }
 
-  _onLedgerClosed(message) {
+  _onLedgerClosed(message: Object): void {
     this._transactionsLeft = -1;
     this._closedLedgerVersion = message.ledgerVersion;
     if (!message || (message && !_.isNumber(message.transactionCount)) ||
@@ -415,7 +460,7 @@ class OrderBook extends EventEmitter {
     return;
   }
 
-  _onTransaction(transaction) {
+  _onTransaction(transaction: Object): void {
     if (this._subscribed && !this._waitingForOffers &&
       this._transactionsLeft > 0
     ) {
@@ -423,7 +468,9 @@ class OrderBook extends EventEmitter {
 
       if (--this._transactionsLeft === 0) {
         const lastClosedLedger = this._closedLedgerVersion;
-        if (this._isAutobridgeable) {
+        if (this._isAutobridgeable && this._legOneBook !== null &&
+          this._legTwoBook !== null
+        ) {
           if (!this._calculatorRunning) {
             if (
               this._legOneBook._lastUpdateLedgerSequence === lastClosedLedger ||
@@ -441,7 +488,7 @@ class OrderBook extends EventEmitter {
     }
   }
 
-  _processTransaction(transaction: Object) {
+  _processTransaction(transaction: Object): void {
     if (this._trace) {
       log.info('_processTransaction', this._key, transaction.transaction.hash);
     }
@@ -553,7 +600,7 @@ class OrderBook extends EventEmitter {
 
       this._requestTransferRate().then(() => {
         // Defer until transfer rate is requested
-        this.updateFundedAmounts(transaction);
+        this._updateFundedAmounts(transaction);
       }, (err) => {
         log.error(
           'Failed to request transfer rate, will not update funded amounts: '
@@ -593,10 +640,13 @@ class OrderBook extends EventEmitter {
    * @return {Object}
    */
 
-  _parseAccountBalanceFromNode(node: Object) {
+  _parseAccountBalanceFromNode(node: Object): {
+    account: string,
+    balance: string
+  } {
     const result = {
-      account: undefined,
-      balance: undefined
+      account: '',
+      balance: ''
     };
 
     switch (node.entryType) {
@@ -633,7 +683,7 @@ class OrderBook extends EventEmitter {
    * @return {Boolean}
    */
 
-  _isBalanceChangeNode(node) {
+  _isBalanceChangeNode(node: Object): boolean {
     // Check meta node has balance, previous balance, and final balance
     if (!(node.fields && node.fields.Balance
     && node.fieldsPrev && node.fieldsFinal
@@ -667,7 +717,7 @@ class OrderBook extends EventEmitter {
    * @param {Object} node - Offer node
    */
 
-  _modifyOffer(node: Object) {
+  _modifyOffer(node: Object): void {
     if (this._trace) {
       log.info('modifying offer', this._key, node.fields);
     }
@@ -699,7 +749,7 @@ class OrderBook extends EventEmitter {
    * @param {Boolean} isOfferCancel - whether node came from an OfferCancel
    */
 
-  _deleteOffer(node: Object, isOfferCancel: boolean) {
+  _deleteOffer(node: Object, isOfferCancel: boolean): void {
     if (this._trace) {
       log.info('deleting offer', this._key, node.fields);
     }
@@ -754,7 +804,7 @@ class OrderBook extends EventEmitter {
    * @param {Object} node - Offer node
    */
 
-  _insertOffer(node) {
+  _insertOffer(node: Object): void {
     if (this._trace) {
       log.info('inserting offer', this._key, node.fields);
     }
@@ -817,8 +867,8 @@ class OrderBook extends EventEmitter {
    * @param {String} account - owner's account address
    */
 
-  _deleteOwnerFunds(account: string) {
-    this._ownerFunds[account] = undefined;
+  _deleteOwnerFunds(account: string): void {
+    delete this._ownerFunds[account];
   }
 
 
@@ -828,7 +878,7 @@ class OrderBook extends EventEmitter {
    * @param {String} account - owner's account address
    */
 
-  _updateOwnerOffersFundedAmount(account: string) {
+  _updateOwnerOffersFundedAmount(account: string): void {
     if (!this._hasOwnerFunds(account)) {
       // We are only updating owner funds that are already cached
       return;
@@ -890,7 +940,7 @@ class OrderBook extends EventEmitter {
    * @return {Amount}
    */
 
-  _resetOwnerOfferTotal(account: string) {
+  _resetOwnerOfferTotal(account: string): void {
     if (this._currencyGets === 'XRP') {
       this._ownerOffersTotal[account] = ZERO_NATIVE_AMOUNT;
     } else {
@@ -1005,7 +1055,7 @@ class OrderBook extends EventEmitter {
    * @api private
    */
 
-  _setOffers(offers) {
+  _setOffers(offers: Array<Object>): void {
     assert(Array.isArray(offers), 'Offers is not an array');
 
     this._resetCache();
@@ -1041,7 +1091,10 @@ class OrderBook extends EventEmitter {
    * @param {String} account - owner's account address
    */
 
-  _hasOwnerFunds(account: string): boolean {
+  _hasOwnerFunds(account?: string): boolean {
+    if (account === undefined) {
+      return false;
+    }
     return this._ownerFunds[account] !== undefined;
   }
 
@@ -1052,7 +1105,7 @@ class OrderBook extends EventEmitter {
    * @param {String} fundedAmount
    */
 
-  _setOwnerFunds(account: string, fundedAmount: string) {
+  _setOwnerFunds(account: string, fundedAmount: string): void {
     assert(!isNaN(Number(fundedAmount)), 'Funded amount is invalid');
 
     this._ownerFundsUnadjusted[account] = fundedAmount;
@@ -1219,7 +1272,7 @@ class OrderBook extends EventEmitter {
    * Reset cached owner's funds, offer counts, and offer sums
    */
 
-  _resetCache() {
+  _resetCache(): void {
     this._ownerFundsUnadjusted = {};
     this._ownerFunds = {};
     this._ownerOffersTotal = {};
@@ -1233,7 +1286,7 @@ class OrderBook extends EventEmitter {
     }
   }
 
-  _emitAsync(args) {
+  _emitAsync(args: Array<any>): void {
     setTimeout(() => this.emit.apply(this, args), 0);
   }
 
@@ -1246,20 +1299,24 @@ class OrderBook extends EventEmitter {
     assert(this._currencyGets !== 'XRP' && this._currencyPays !== 'XRP',
       'Autobridging is only for IOU:IOU orderbooks');
 
-    if (this._destroyed) {
-      return Promise.resolve();
-    }
-
     if (this._trace) {
       log.info('_computeAutobridgedOffers autobridgeCalculator.calculate',
         this._key);
     }
 
+    // this check is only for flow
+    const legOneOffers =
+      (this._legOneBook !== null && this._legOneBook !== undefined) ?
+        this._legOneBook.getOffersSync() : [];
+    const legTwoOffers =
+      (this._legTwoBook !== null && this._legTwoBook !== undefined) ?
+        this._legTwoBook.getOffersSync() : [];
+
     const autobridgeCalculator = new AutobridgeCalculator(
       this._currencyGets,
       this._currencyPays,
-      this._legOneBook.getOffersSync(),
-      this._legTwoBook.getOffersSync(),
+      legOneOffers,
+      legTwoOffers,
       this._issuerGets,
       this._issuerPays
     );
@@ -1269,13 +1326,13 @@ class OrderBook extends EventEmitter {
     });
   }
 
-  _computeAutobridgedOffersWrapper() {
+  _computeAutobridgedOffersWrapper(): void {
     if (this._trace) {
       log.info('_computeAutobridgedOffersWrapper', this._key, this._synced,
         this._calculatorRunning);
     }
     if (!this._gotOffersFromLegOne || !this._gotOffersFromLegTwo ||
-        !this._synced || this._destroyed || this._calculatorRunning
+        !this._synced || this._calculatorRunning
     ) {
       return;
     }
@@ -1293,11 +1350,7 @@ class OrderBook extends EventEmitter {
    * @return
    */
 
-  _mergeDirectAndAutobridgedBooks() {
-    if (this._destroyed) {
-      return;
-    }
-
+  _mergeDirectAndAutobridgedBooks(): void {
     if (_.isEmpty(this._offers) && _.isEmpty(this._offersAutobridged)) {
       if (this._synced && this._gotOffersFromLegOne &&
         this._gotOffersFromLegTwo) {

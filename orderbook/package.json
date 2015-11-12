@@ -9,8 +9,8 @@
   ],
   "scripts": {
     "clean": "rm -rf dist/npm && rm -rf build/flow",
-    "typecheck": "babel --optional runtime --blacklist flow -d build/flow/ src/ && flow check",
-    "compileflow": "babel --optional runtime --blacklist flow -d build/flow/ src/",
+    "typecheck": "babel --optional runtime --blacklist flow,es6.classes -d build/flow/ src/ && flow check",
+    "compileflow": "babel --optional runtime --blacklist flow,es6.classes -d build/flow/ src/",
     "compile": "babel -D --optional runtime -d dist/npm/ src/",
     "prepublish": "npm run clean && npm run compile",
     "test": "istanbul test _mocha",
