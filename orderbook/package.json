@@ -45,6 +45,6 @@
     "istanbul": "^0.3.22",
     "mocha": "^2.3.3",
     "eslint": "^1.9.0",
-    "ripple-lib": "0.13.0-rc15"
+    "ripple-lib": "0.13.2"
   }
 }

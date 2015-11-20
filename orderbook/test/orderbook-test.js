@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable max-len, indent, no-unused-vars */
 
 'use strict';
 
@@ -10,7 +10,7 @@ const RippleAPI = require('ripple-lib').RippleAPI;
 const OrderBook = require('../src/orderbook').OrderBook;
 const OrderBookUtils = require('../src/orderbookutils');
 
-describe.skip('OrderBook', function() {
+describe('OrderBook', function() {
 
   function createOrderBook(options) {
     const api = new RippleAPI();
@@ -432,7 +432,7 @@ describe.skip('OrderBook', function() {
     book._issuerTransferRate = new IOUValue('1.000000000');
 
     assert.strictEqual(book._applyTransferRate('0.9980039920159681'),
-      '0.9980039920159681');
+                       '0.9980039920159681');
   });
 
   it('Apply transfer rate - invalid balance', function() {
@@ -984,89 +984,89 @@ describe.skip('OrderBook', function() {
       const meta = {
         AffectedNodes: [
           {
-            ModifiedNode: {
-              FinalFields: {
-                Balance: {
-                  currency: 'USD',
-                  issuer: addresses.ISSUER,
-                  value: '10'
-                },
-                Flags: 131072,
-                HighLimit: {
-                  currency: 'USD',
-                  issuer: addresses.ISSUER,
-                  value: '100'
-                },
-                HighNode: '0000000000000000',
-                LowLimit: {
-                  currency: 'USD',
-                  issuer: 'r3PDtZSa5LiYp1Ysn1vMuMzB59RzV3W9QH',
-                  value: '0'
-                },
-                LowNode: '0000000000000000'
+          ModifiedNode: {
+            FinalFields: {
+              Balance: {
+                currency: 'USD',
+                issuer: addresses.ISSUER,
+                value: '10'
               },
-              LedgerEntryType: 'RippleState',
-              LedgerIndex: 'EA4BF03B4700123CDFFB6EB09DC1D6E28D5CEB7F680FB00FC24BC1C3BB2DB959',
-              PreviousFields: {
-                Balance: {
-                  currency: 'USD',
-                  issuer: addresses.ISSUER,
-                  value: '0'
-                }
+              Flags: 131072,
+              HighLimit: {
+                currency: 'USD',
+                issuer: addresses.ISSUER,
+                value: '100'
               },
-              PreviousTxnID: '53354D84BAE8FDFC3F4DA879D984D24B929E7FEB9100D2AD9EFCD2E126BCCDC8',
-              PreviousTxnLgrSeq: 343570
-            }
-          },
-          {
-            ModifiedNode: {
-              FinalFields: {
-                Balance: {
-                  currency: 'USD',
-                  issuer: addresses.ISSUER,
-                  value: '-10'
-                },
-                Flags: 131072,
-                HighLimit: {
-                  currency: 'USD',
-                  issuer: 'r3PDtZSa5LiYp1Ysn1vMuMzB59RzV3W9QH',
-                  value: '100'
-                },
-                HighNode: '0000000000000000',
-                LowLimit: {
-                  currency: 'USD',
-                  issuer: addresses.ISSUER,
-                  value: '0'
-                },
-                LowNode: '0000000000000000'
+              HighNode: '0000000000000000',
+              LowLimit: {
+                currency: 'USD',
+                issuer: 'r3PDtZSa5LiYp1Ysn1vMuMzB59RzV3W9QH',
+                value: '0'
               },
-              LedgerEntryType: 'RippleState',
-              LedgerIndex: 'EA4BF03B4700123CDFFB6EB09DC1D6E28D5CEB7F680FB00FC24BC1C3BB2DB959',
-              PreviousFields: {
-                Balance: {
-                  currency: 'USD',
-                  issuer: addresses.ISSUER,
-                  value: '0'
-                }
-              },
-              PreviousTxnID: '53354D84BAE8FDFC3F4DA879D984D24B929E7FEB9100D2AD9EFCD2E126BCCDC8',
-              PreviousTxnLgrSeq: 343570
-            }
+              LowNode: '0000000000000000'
+            },
+            LedgerEntryType: 'RippleState',
+            LedgerIndex: 'EA4BF03B4700123CDFFB6EB09DC1D6E28D5CEB7F680FB00FC24BC1C3BB2DB959',
+            PreviousFields: {
+              Balance: {
+                currency: 'USD',
+                issuer: addresses.ISSUER,
+                value: '0'
+              }
+            },
+            PreviousTxnID: '53354D84BAE8FDFC3F4DA879D984D24B929E7FEB9100D2AD9EFCD2E126BCCDC8',
+            PreviousTxnLgrSeq: 343570
           }
+        },
+        {
+          ModifiedNode: {
+            FinalFields: {
+              Balance: {
+                currency: 'USD',
+                issuer: addresses.ISSUER,
+                value: '-10'
+              },
+              Flags: 131072,
+              HighLimit: {
+                currency: 'USD',
+                issuer: 'r3PDtZSa5LiYp1Ysn1vMuMzB59RzV3W9QH',
+                value: '100'
+              },
+              HighNode: '0000000000000000',
+              LowLimit: {
+                currency: 'USD',
+                issuer: addresses.ISSUER,
+                value: '0'
+              },
+              LowNode: '0000000000000000'
+            },
+            LedgerEntryType: 'RippleState',
+            LedgerIndex: 'EA4BF03B4700123CDFFB6EB09DC1D6E28D5CEB7F680FB00FC24BC1C3BB2DB959',
+            PreviousFields: {
+              Balance: {
+                currency: 'USD',
+                issuer: addresses.ISSUER,
+                value: '0'
+              }
+            },
+            PreviousTxnID: '53354D84BAE8FDFC3F4DA879D984D24B929E7FEB9100D2AD9EFCD2E126BCCDC8',
+            PreviousTxnLgrSeq: 343570
+          }
+        }
         ]
       };
 
       assert.deepEqual(book._parseAccountBalanceFromNode(
         OrderBookUtils.getAffectedNodes(meta)[0]), {
-          account: 'r3PDtZSa5LiYp1Ysn1vMuMzB59RzV3W9QH',
-          balance: '10'
-        });
+        account: 'r3PDtZSa5LiYp1Ysn1vMuMzB59RzV3W9QH',
+        balance: '10'
+      });
 
       assert.deepEqual(book._parseAccountBalanceFromNode(
         OrderBookUtils.getAffectedNodes(meta)[1]), {
-          account: 'r3PDtZSa5LiYp1Ysn1vMuMzB59RzV3W9QH',
-          balance: '10'
-        });
+        account: 'r3PDtZSa5LiYp1Ysn1vMuMzB59RzV3W9QH',
+        balance: '10'
+      });
     });
 
     it('Parse account balance from node - native currency', function() {
@@ -1101,9 +1101,9 @@ describe.skip('OrderBook', function() {
 
       assert.deepEqual(book._parseAccountBalanceFromNode(
         OrderBookUtils.getAffectedNodes(meta)[0]), {
-          account: 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59',
-          balance: '9999999990'
-        });
+        account: 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59',
+        balance: '9999999990'
+      });
     });
   });
 
@@ -1134,14 +1134,14 @@ describe.skip('OrderBook', function() {
       switch (++receivedFundsChangedEvents) {
         case 1:
           assert.strictEqual(offer.is_fully_funded, false);
-          assert.strictEqual(offer.taker_gets_funded, '10');
-          assert.strictEqual(offer.taker_pays_funded, '1954238072');
-          break;
+        assert.strictEqual(offer.taker_gets_funded, '10');
+        assert.strictEqual(offer.taker_pays_funded, '1954238072');
+        break;
         case 2:
           assert.strictEqual(offer.is_fully_funded, false);
-          assert.strictEqual(offer.taker_gets_funded, '0');
-          assert.strictEqual(offer.taker_pays_funded, '0');
-          break;
+        assert.strictEqual(offer.taker_gets_funded, '0');
+        assert.strictEqual(offer.taker_pays_funded, '0');
+        break;
       }
     });
 
@@ -1181,16 +1181,16 @@ describe.skip('OrderBook', function() {
       switch (++receivedFundsChangedEvents) {
         case 1:
           assert.strictEqual(previousFunds, '19');
-          assert.strictEqual(offer.is_fully_funded, true);
-          assert.strictEqual(offer.taker_gets_funded, fixtures.TAKER_GETS);
-          assert.strictEqual(offer.taker_pays_funded, fixtures.TAKER_PAYS);
-          break;
+        assert.strictEqual(offer.is_fully_funded, true);
+        assert.strictEqual(offer.taker_gets_funded, fixtures.TAKER_GETS);
+        assert.strictEqual(offer.taker_pays_funded, fixtures.TAKER_PAYS);
+        break;
         case 2:
           assert.strictEqual(previousFunds, '0');
-          assert.strictEqual(offer.is_fully_funded, true);
-          assert.strictEqual(offer.taker_gets_funded, '4.9656112525');
-          assert.strictEqual(offer.taker_pays_funded, '972251352');
-          break;
+        assert.strictEqual(offer.is_fully_funded, true);
+        assert.strictEqual(offer.taker_gets_funded, '4.9656112525');
+        assert.strictEqual(offer.taker_pays_funded, '972251352');
+        break;
       }
     });
 
@@ -1270,10 +1270,10 @@ describe.skip('OrderBook', function() {
       switch (++receivedFundsChangedEvents) {
         case 1:
           assert(offer.is_fully_funded);
-          break;
+        break;
         case 2:
           assert(!offer.is_fully_funded);
-          break;
+        break;
       }
     });
 
@@ -1974,8 +1974,8 @@ describe.skip('OrderBook', function() {
 
     book._deleteOffer(OrderBookUtils.getAffectedNodes(
       fixtures.transactionWithDeletedOffer({
-        transaction_type: 'OfferCancel'
-      }).meta)[0], true);
+      transaction_type: 'OfferCancel'
+    }).meta)[0], true);
 
 
     assert.strictEqual(book._offers.length, 2);
@@ -2003,8 +2003,8 @@ describe.skip('OrderBook', function() {
 
     book._deleteOffer(OrderBookUtils.getAffectedNodes(
       fixtures.transactionWithDeletedOffer({
-        transaction_type: 'OfferCancel'
-      }).meta)[0], true);
+      transaction_type: 'OfferCancel'
+    }).meta)[0], true);
 
     assert.strictEqual(book._offers.length, 2);
     assert.strictEqual(book._offerCounts[addresses.ACCOUNT], 1);
@@ -2031,8 +2031,8 @@ describe.skip('OrderBook', function() {
 
     book._insertOffer(OrderBookUtils.getAffectedNodes(
       fixtures.transactionWithCreatedOffer({
-        amount: '51.04587961502088'
-      }).meta)[0]);
+      amount: '51.04587961502088'
+    }).meta)[0]);
 
     assert.strictEqual(book._offers.length, 2);
 
@@ -2056,8 +2056,8 @@ describe.skip('OrderBook', function() {
 
     book._insertOffer(OrderBookUtils.getAffectedNodes(
       fixtures.transactionWithCreatedOffer({
-        amount: '298'
-      }).meta)[0]);
+      amount: '298'
+    }).meta)[0]);
 
     assert.strictEqual(book._offers.length, 4);
     assert.strictEqual(book._offerCounts[addresses.ACCOUNT], 3);
@@ -2094,8 +2094,8 @@ describe.skip('OrderBook', function() {
 
     book._insertOffer(OrderBookUtils.getAffectedNodes(
       fixtures.transactionWithCreatedOffer({
-        amount: '5'
-      }).meta)[0]);
+      amount: '5'
+    }).meta)[0]);
 
     assert.strictEqual(book._offers.length, 4);
     assert.strictEqual(book._offerCounts[addresses.ACCOUNT], 3);
@@ -2132,8 +2132,8 @@ describe.skip('OrderBook', function() {
 
     book._insertOffer(OrderBookUtils.getAffectedNodes(
       fixtures.transactionWithCreatedOffer({
-        amount: '19.84080331'
-      }).meta)[0]);
+      amount: '19.84080331'
+    }).meta)[0]);
 
     assert.strictEqual(book._offers.length, 4);
     assert.strictEqual(book._offerCounts[addresses.ACCOUNT], 3);
@@ -2161,96 +2161,96 @@ describe.skip('OrderBook', function() {
 
     const expected = [
       {
-        Account: addresses.ACCOUNT,
-        BookDirectory: '6EAB7C172DEFA430DBFAD120FDC373B5F5AF8B191649EC985711A3A4254F5000',
-        BookNode: '0000000000000000',
-        Flags: 131072,
-        LedgerEntryType: 'Offer',
-        OwnerNode: '0000000000000000',
-        Sequence: 195,
-        TakerGets: '1000',
-        TakerPays: {
-          currency: 'USD',
-          issuer: addresses.ISSUER,
-          value: '56.06639660617357'
-        },
-        index: 'B6BC3B0F87976370EE11F5575593FE63AA5DC1D602830DC96F04B2D597F044BF',
-        owner_funds: '600',
-        is_fully_funded: false,
-        taker_gets_funded: '600',
-        taker_pays_funded: '33.6398379637041',
-        qualityHex: '5711A3A4254F5000',
-        quality: '.0560663966061735'
+      Account: addresses.ACCOUNT,
+      BookDirectory: '6EAB7C172DEFA430DBFAD120FDC373B5F5AF8B191649EC985711A3A4254F5000',
+      BookNode: '0000000000000000',
+      Flags: 131072,
+      LedgerEntryType: 'Offer',
+      OwnerNode: '0000000000000000',
+      Sequence: 195,
+      TakerGets: '1000',
+      TakerPays: {
+        currency: 'USD',
+        issuer: addresses.ISSUER,
+        value: '56.06639660617357'
       },
-      {
-        Account: addresses.OTHER_ACCOUNT,
-        BookDirectory: '6EAB7C172DEFA430DBFAD120FDC373B5F5AF8B191649EC985711B6D8C62EF414',
-        BookNode: '0000000000000000',
-        Expiration: 461498565,
-        Flags: 131072,
-        LedgerEntryType: 'Offer',
-        OwnerNode: '0000000000000144',
-        Sequence: 29354,
-        TakerGets: '2000',
-        TakerPays: {
-          currency: 'USD',
-          issuer: addresses.ISSUER,
-          value: '99.72233516476456'
-        },
-        index: 'A437D85DF80D250F79308F2B613CF5391C7CF8EE9099BC4E553942651CD9FA86',
-        owner_funds: '4000',
-        is_fully_funded: true,
-        taker_gets_funded: '2000',
-        taker_pays_funded: '99.72233516476456',
-        qualityHex: '5711B6D8C62EF414',
-        quality: '0.049861167582382'
+      index: 'B6BC3B0F87976370EE11F5575593FE63AA5DC1D602830DC96F04B2D597F044BF',
+      owner_funds: '600',
+      is_fully_funded: false,
+      taker_gets_funded: '600',
+      taker_pays_funded: '33.6398379637041',
+      qualityHex: '5711A3A4254F5000',
+      quality: '.0560663966061735'
+    },
+    {
+      Account: addresses.OTHER_ACCOUNT,
+      BookDirectory: '6EAB7C172DEFA430DBFAD120FDC373B5F5AF8B191649EC985711B6D8C62EF414',
+      BookNode: '0000000000000000',
+      Expiration: 461498565,
+      Flags: 131072,
+      LedgerEntryType: 'Offer',
+      OwnerNode: '0000000000000144',
+      Sequence: 29354,
+      TakerGets: '2000',
+      TakerPays: {
+        currency: 'USD',
+        issuer: addresses.ISSUER,
+        value: '99.72233516476456'
       },
-      {
-        Account: addresses.THIRD_ACCOUNT,
-        BookDirectory: '6EAB7C172DEFA430DBFAD120FDC373B5F5AF8B191649EC985711B6D8C62EF414',
-        BookNode: '0000000000000000',
-        Expiration: 461498565,
-        Flags: 131072,
-        LedgerEntryType: 'Offer',
-        OwnerNode: '0000000000000144',
-        Sequence: 29356,
-        TakerGets: '2000',
-        TakerPays: {
-          currency: 'USD',
-          issuer: addresses.ISSUER,
-          value: '99.72233516476456'
-        },
-        index: 'A437D85DF80D250F79308F2B613CF5391C7CF8EE9099BC4E553942651CD9FA86',
-        owner_funds: '3900',
-        is_fully_funded: true,
-        taker_gets_funded: '2000',
-        taker_pays_funded: '99.72233516476456',
-        qualityHex: '5711B6D8C62EF414',
-        quality: '0.049861167582382'
+      index: 'A437D85DF80D250F79308F2B613CF5391C7CF8EE9099BC4E553942651CD9FA86',
+      owner_funds: '4000',
+      is_fully_funded: true,
+      taker_gets_funded: '2000',
+      taker_pays_funded: '99.72233516476456',
+      qualityHex: '5711B6D8C62EF414',
+      quality: '0.049861167582382'
+    },
+    {
+      Account: addresses.THIRD_ACCOUNT,
+      BookDirectory: '6EAB7C172DEFA430DBFAD120FDC373B5F5AF8B191649EC985711B6D8C62EF414',
+      BookNode: '0000000000000000',
+      Expiration: 461498565,
+      Flags: 131072,
+      LedgerEntryType: 'Offer',
+      OwnerNode: '0000000000000144',
+      Sequence: 29356,
+      TakerGets: '2000',
+      TakerPays: {
+        currency: 'USD',
+        issuer: addresses.ISSUER,
+        value: '99.72233516476456'
       },
-      {
-        Account: addresses.THIRD_ACCOUNT,
-        BookDirectory: '6EAB7C172DEFA430DBFAD120FDC373B5F5AF8B191649EC985711B6D8C62EF414',
-        BookNode: '0000000000000000',
-        Expiration: 461498565,
-        Flags: 131078,
-        LedgerEntryType: 'Offer',
-        OwnerNode: '0000000000000144',
-        Sequence: 29354,
-        TakerGets: '2000',
-        TakerPays: {
-          currency: 'USD',
-          issuer: addresses.ISSUER,
-          value: '99.72233516476456'
-        },
-        index: 'A437D85DF80D250F79308F2B613CF5391C7CF8EE9099BC4E553942651CD9FA86',
-        is_fully_funded: false,
-        taker_gets_funded: '1900',
-        taker_pays_funded: '94.7362184065258',
-        owner_funds: '3900',
-        qualityHex: '5711B6D8C62EF414',
-        quality: '0.049861167582382'
-      }
+      index: 'A437D85DF80D250F79308F2B613CF5391C7CF8EE9099BC4E553942651CD9FA86',
+      owner_funds: '3900',
+      is_fully_funded: true,
+      taker_gets_funded: '2000',
+      taker_pays_funded: '99.72233516476456',
+      qualityHex: '5711B6D8C62EF414',
+      quality: '0.049861167582382'
+    },
+    {
+      Account: addresses.THIRD_ACCOUNT,
+      BookDirectory: '6EAB7C172DEFA430DBFAD120FDC373B5F5AF8B191649EC985711B6D8C62EF414',
+      BookNode: '0000000000000000',
+      Expiration: 461498565,
+      Flags: 131078,
+      LedgerEntryType: 'Offer',
+      OwnerNode: '0000000000000144',
+      Sequence: 29354,
+      TakerGets: '2000',
+      TakerPays: {
+        currency: 'USD',
+        issuer: addresses.ISSUER,
+        value: '99.72233516476456'
+      },
+      index: 'A437D85DF80D250F79308F2B613CF5391C7CF8EE9099BC4E553942651CD9FA86',
+      is_fully_funded: false,
+      taker_gets_funded: '1900',
+      taker_pays_funded: '94.7362184065258',
+      owner_funds: '3900',
+      qualityHex: '5711B6D8C62EF414',
+      quality: '0.049861167582382'
+    }
     ];
 
     const book = createOrderBook({
@@ -2278,5 +2278,52 @@ describe.skip('OrderBook', function() {
       assert.strictEqual(book._subscribed, true);
       done();
     });
+  });
+
+  it('Offers expired', function() {
+    const book = createOrderBook({
+      currency_gets: 'USD',
+      issuer_gets: addresses.ISSUER,
+      currency_pays: 'XRP'
+    });
+
+    let numModelEvents = 0;
+    let numOfferRemovedEvents = 0;
+
+    book.on('model', function() {
+      numModelEvents += 1;
+    });
+
+    book.on('offer_removed', function() {
+      numOfferRemovedEvents += 1;
+    });
+
+    book._subscribed = true;
+    book._issuerTransferRate = new IOUValue(1000000000);
+
+    function toRippleTime(t) {
+      const timestamp_ = t instanceof Date ? t.getTime() : t;
+      return Math.round(t / 1000) - 0x386D4380;
+    }
+
+    const d1 = toRippleTime(new Date());
+    let d2 = new Date();
+    d2.setSeconds(d2.getSeconds() - 1);
+    d2 = toRippleTime(d2);
+
+    const offers = fixtures.fiatOffers({expiration: d2});
+    offers[0].Expiration = offers[0].Expiration + 2;
+
+    book._setOffers(offers);
+
+    assert(book._offers.length === 3);
+
+    book._api.emit('ledgerClosed', {
+      ledger_time: d1
+    });
+
+    assert(book._offers.length === 1);
+    assert(numModelEvents === 1);
+    assert(numOfferRemovedEvents === 2);
   });
 });
