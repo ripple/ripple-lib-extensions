@@ -349,6 +349,7 @@ class OrderBook extends EventEmitter {
 
     function onLedgerClosedWrapper(message: Object) {
       self._onLedgerClosed(message);
+      self._pruneExpiredOffers(message);
     }
 
     function listenersModified(action: string, event: string) {
@@ -839,6 +840,27 @@ class OrderBook extends EventEmitter {
     this._updateOwnerOffersFundedAmount(offer.Account);
 
     this.emit('offer_added', offer);
+  }
+
+  _pruneExpiredOffers(ledger: Object): void {
+    const offersLength = this._offers.length;
+
+    this._offers = this._offers.filter(offer => {
+      if (offer.Expiration <= ledger.ledger_time) {
+        this._subtractOwnerOfferTotal(offer.Account, offer.TakerGets);
+        this._decrementOwnerOfferCount(offer.Account);
+        this._updateOwnerOffersFundedAmount(offer.Account);
+        this.emit('offer_removed', offer);
+
+        return false;
+      }
+
+      return true;
+    });
+
+    if (this._offers.length < offersLength) {
+      this.emit('model', this._offers);
+    }
   }
 
   /**
