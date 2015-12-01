@@ -9,6 +9,7 @@ const {XRPValue, IOUValue} = require('ripple-lib-value');
 const RippleAPI = require('ripple-lib').RippleAPI;
 const OrderBook = require('../src/orderbook').OrderBook;
 const OrderBookUtils = require('../src/orderbookutils');
+const EventEmitter = require('events').EventEmitter;
 
 describe('OrderBook', function() {
 
@@ -172,6 +173,42 @@ describe('OrderBook', function() {
 
     book.once('model', function() {});
     book.emit('model', {});
+  });
+
+  it('Automatic unsubscription - check unsubscribed', function(done) {
+    const book = createOrderBook({
+      currency_gets: 'XRP',
+      issuer_pays: addresses.ISSUER,
+      currency_pays: 'BTC'
+    });
+
+    book._issuerTransferRate = new IOUValue('1.000000000');
+
+    book._api.isConnected = function() {
+      return true;
+    };
+
+    console.log('---- ', EventEmitter.listenerCount(book._api.connection, 'transaction'));
+    console.log('---- ', EventEmitter.listenerCount(book._api.connection, 'connected'));
+    assert.strictEqual(EventEmitter.listenerCount(book._api.connection, 'transaction'), 0);
+    assert.strictEqual(EventEmitter.listenerCount(book._api.connection, 'connected'), 0);
+
+    function noop() {}
+    book.on('model', noop);
+    setTimeout(() => {
+      console.log('2 ---- ', EventEmitter.listenerCount(book._api.connection, 'transaction'));
+      console.log('2 ---- ', EventEmitter.listenerCount(book._api.connection, 'connected'));
+      assert.strictEqual(EventEmitter.listenerCount(book._api.connection, 'transaction'), 1);
+      assert.strictEqual(EventEmitter.listenerCount(book._api.connection, 'connected'), 1);
+      book.removeListener('model', noop);
+      setTimeout(() => {
+        console.log('3 ---- ', EventEmitter.listenerCount(book._api.connection, 'transaction'));
+        console.log('3 ---- ', EventEmitter.listenerCount(book._api.connection, 'connected'));
+        assert.strictEqual(EventEmitter.listenerCount(book._api.connection, 'transaction'), 0);
+        assert.strictEqual(EventEmitter.listenerCount(book._api.connection, 'connected'), 0);
+        done();
+      }, 2);
+    }, 1);
   });
 
   it('Subscribe to transactions on reconnect', function(done) {

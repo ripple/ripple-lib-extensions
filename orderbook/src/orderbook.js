@@ -127,6 +127,9 @@ class OrderBook extends EventEmitter {
 
   _trace: boolean;
 
+  _onReconnectBound: () => void;
+  _onTransactionBound: (transaction: Object) => void;
+
   constructor(api: Object, currencyGets: string, issuerGets?: string,
     currencyPays: string, issuerPays?: string, account?: string, trace? = false
   ) {
@@ -177,6 +180,9 @@ class OrderBook extends EventEmitter {
     this._calculatorRunning = false;
     this._gotOffersFromLegOne = false;
     this._gotOffersFromLegTwo = false;
+
+    this._onReconnectBound = this._onReconnect.bind(this);
+    this._onTransactionBound = this._onTransaction.bind(this);
 
     if (this._isAutobridgeable) {
       this._legOneBook = new OrderBook(api, 'XRP', undefined,
@@ -416,9 +422,12 @@ class OrderBook extends EventEmitter {
 
   }
 
-  _subscribe(subscribe: boolean) {
-    const self = this;
+  _onReconnect() {
+    setTimeout(this._subscribe.bind(this, false), 1);
+    setTimeout(this._subscribe.bind(this, true), 2);
+  }
 
+  _subscribe(subscribe: boolean) {
     const request = {
       command: subscribe ? 'subscribe' : 'unsubscribe',
       streams: ['transactions']
@@ -427,23 +436,15 @@ class OrderBook extends EventEmitter {
       this._subscribed = subscribe;
     });
 
-    function onTransactionWrapper(data) {
-      self._onTransaction(data);
-    }
-
-    function onReconnect() {
-      setTimeout(self._subscribe.bind(self, false), 1);
-      setTimeout(self._subscribe.bind(self, true), 2);
-    }
-
     if (subscribe) {
-      this._api.connection.on('connected', onReconnect);
-      this._api.connection.on('transaction', onTransactionWrapper);
+      this._api.connection.on('connected', this._onReconnectBound);
+      this._api.connection.on('transaction', this._onTransactionBound);
       this._waitingForOffers = true;
       this._requestTransferRate().then(this._requestOffers.bind(this));
     } else {
-      this._api.connection.removeListener('transaction', onTransactionWrapper);
-      this._api.connection.removeListener('connected', onReconnect);
+      this._api.connection.removeListener('transaction',
+        this._onTransactionBound);
+      this._api.connection.removeListener('connected', this._onReconnectBound);
       this._resetCache();
     }
   }
