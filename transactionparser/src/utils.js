@@ -71,6 +71,7 @@ function getAffectedAccounts(metadata) {
   return _.uniq(accounts);
 }
 
+
 module.exports = {
   dropsToXRP: dropsToXRP,
   normalizeNodes: normalizeNodes,
