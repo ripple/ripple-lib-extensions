@@ -1,56 +1,79 @@
+'use strict';
+
 var _ = require('lodash');
 var BigNumber = require('bignumber.js');
 var normalizeNodes = require('./utils').normalizeNodes;
 var dropsToXRP = require('./utils').dropsToXRP;
 
-function parseBalance(balance) {
-  return new BigNumber(balance.value || balance);
+function groupByAddress(balanceChanges) {
+  var grouped = _.groupBy(balanceChanges, function(node) {
+    return node.address;
+  });
+  return _.mapValues(grouped, function(group) {
+    return _.map(group, function(node) {
+      return node.balance;
+    });
+  });
+}
+
+function parseValue(value) {
+  return new BigNumber(value.value || value);
 }
 
 function computeBalanceChange(node) {
+  var value = null;
   if (node.newFields.Balance) {
-    return parseBalance(node.newFields.Balance)
-  } else if(node.previousFields.Balance && node.finalFields.Balance) {
-    return parseBalance(node.finalFields.Balance).minus(
-      parseBalance(node.previousFields.Balance));
-  } else {
-    return new BigNumber(0);
+    value = parseValue(node.newFields.Balance);
+  } else if (node.previousFields.Balance && node.finalFields.Balance) {
+    value = parseValue(node.finalFields.Balance).minus(
+      parseValue(node.previousFields.Balance));
   }
+  return value === null ? null : value.isZero() ? null : value;
 }
 
-function parseXRPBalanceChange(node) {
-  var balanceChange = computeBalanceChange(node);
+function parseFinalBalance(node) {
+  if (node.newFields.Balance) {
+    return parseValue(node.newFields.Balance);
+  } else if (node.finalFields.Balance) {
+    return parseValue(node.finalFields.Balance);
+  }
+  return null;
+}
 
-  if(balanceChange.isZero()) {
+
+function parseXRPQuantity(node, valueParser) {
+  var value = valueParser(node);
+
+  if (value === null) {
     return null;
   }
 
   return {
     address: node.finalFields.Account || node.newFields.Account,
-    balance_change: {
+    balance: {
       counterparty: '',
       currency: 'XRP',
-      value: dropsToXRP(balanceChange).toString()
+      value: dropsToXRP(value).toString()
     }
   };
 }
 
-function flipBalanceChange(change) {
-  var negatedBalance = (new BigNumber(change.balance_change.value)).negated();
+function flipTrustlinePerspective(quantity) {
+  var negatedBalance = (new BigNumber(quantity.balance.value)).negated();
   return {
-    address: change.balance_change.counterparty,
-    balance_change: {
-      counterparty: change.address,
-      currency: change.balance_change.currency,
+    address: quantity.balance.counterparty,
+    balance: {
+      counterparty: quantity.address,
+      currency: quantity.balance.currency,
       value: negatedBalance.toString()
     }
   };
 }
 
-function parseTrustlineBalanceChanges(node) {
-  var balanceChange = computeBalanceChange(node);
+function parseTrustlineQuantity(node, valueParser) {
+  var value = valueParser(node);
 
-  if(balanceChange.isZero()) {
+  if (value === null) {
     return null;
   }
 
@@ -62,44 +85,51 @@ function parseTrustlineBalanceChanges(node) {
   var fields = _.isEmpty(node.newFields) ? node.finalFields : node.newFields;
 
   // the balance is always from low node's perspective
-  var change = {
+  var result = {
     address: fields.LowLimit.issuer,
-    balance_change: {
+    balance: {
       counterparty: fields.HighLimit.issuer,
       currency: fields.Balance.currency,
-      value: balanceChange.toString()
+      value: value.toString()
     }
   };
-  return [change, flipBalanceChange(change)];
+  return [result, flipTrustlinePerspective(result)];
 }
 
-function groupByAddress(balanceChanges) {
-  var grouped = _.groupBy(balanceChanges, function(change) {
-    return change.address;
+function parseQuantities(metadata, valueParser) {
+  var values = normalizeNodes(metadata).map(function(node) {
+    if (node.entryType === 'AccountRoot') {
+      return [parseXRPQuantity(node, valueParser)];
+    } else if (node.entryType === 'RippleState') {
+      return parseTrustlineQuantity(node, valueParser);
+    }
+    return [];
   });
-  return _.mapValues(grouped, function(group) {
-    return _.map(group, function(change) {
-      return change.balance_change;
-    });
-  });
+  return groupByAddress(_.compact(_.flatten(values)));
 }
 
 /**
- * Computes the complete list of every balance that changed in the ledger
- * as a result of the given transaction.
+ *  Computes the complete list of every balance that changed in the ledger
+ *  as a result of the given transaction.
+ *
+ *  @param {Object} metadata Transaction metada
+ *  @returns {Object} parsed balance changes
  */
 function parseBalanceChanges(metadata) {
-  var balanceChanges = normalizeNodes(metadata).map(function(node) {
-    if (node.entryType === 'AccountRoot') {
-      return [parseXRPBalanceChange(node)];
-    } else if (node.entryType === 'RippleState') {
-      return parseTrustlineBalanceChanges(node);
-    } else {
-      return [ ];
-    }
-  });
-  return groupByAddress(_.compact(_.flatten(balanceChanges)));
+  return parseQuantities(metadata, computeBalanceChange);
 }
 
 
+/**
+ *  Computes the complete list of every final balance in the ledger
+ *  as a result of the given transaction.
+ *
+ *  @param {Object} metadata Transaction metada
+ *  @returns {Object} parsed balances
+ */
+function parseFinalBalances(metadata) {
+  return parseQuantities(metadata, parseFinalBalance);
+}
+
 module.exports.parseBalanceChanges = parseBalanceChanges;
+module.exports.parseFinalBalances = parseFinalBalances;
