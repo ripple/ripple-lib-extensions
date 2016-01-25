@@ -366,7 +366,7 @@ class OrderBook extends EventEmitter {
           case 'add':
             if (++self._listeners === 1) {
 
-              self._api.on('ledgerClosed', onLedgerClosedWrapper);
+              self._api.on('ledger', onLedgerClosedWrapper);
 
               if (self._isAutobridgeable) {
                 if (self._legOneBook !== null && self._legOneBook !== undefined
@@ -386,7 +386,7 @@ class OrderBook extends EventEmitter {
             break;
           case 'remove':
             if (--self._listeners === 0) {
-              self._api.removeListener('ledgerClosed', onLedgerClosedWrapper);
+              self._api.removeListener('ledger', onLedgerClosedWrapper);
 
               self._gotOffersFromLegOne = false;
               self._gotOffersFromLegTwo = false;
