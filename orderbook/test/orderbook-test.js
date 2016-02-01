@@ -1621,7 +1621,7 @@ describe('OrderBook', function() {
     const offer2 = fixtures.transactionWithCreatedOffer();
     const offer3 = fixtures.transactionWithCreatedOffer();
 
-    book._api.emit('ledgerClosed', {transactionCount: 3});
+    book._api.emit('ledger', {transactionCount: 3});
 
     book._api.connection.emit('transaction', offer);
     book._api.connection.emit('transaction', offer2);
@@ -1720,7 +1720,7 @@ describe('OrderBook', function() {
 
     const message = fixtures.transactionWithDeletedOffer();
 
-    book._api.emit('ledgerClosed', {transactionCount: 1});
+    book._api.emit('ledger', {transactionCount: 1});
 
     book._api.connection.emit('transaction', message);
 
@@ -1878,7 +1878,7 @@ describe('OrderBook', function() {
 
     const message = fixtures.transactionWithModifiedOffer();
 
-    book._api.emit('ledgerClosed', {transactionCount: 1});
+    book._api.emit('ledger', {transactionCount: 1});
 
     book._api.connection.emit('transaction', message);
 
@@ -2355,7 +2355,7 @@ describe('OrderBook', function() {
 
     assert(book._offers.length === 3);
 
-    book._api.emit('ledgerClosed', {
+    book._api.emit('ledger', {
       ledger_time: d1
     });
 
