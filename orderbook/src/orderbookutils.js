@@ -85,7 +85,7 @@ OrderBookUtils.getAffectedNodes = function(
 
   const nodes: Array<Object> = [];
 
-  meta.AffectedNodes.forEach((rawNode) => {
+  meta.AffectedNodes.forEach(rawNode => {
     const result = {};
     result.nodeType = getNodeType(rawNode);
     if (result.nodeType) {

@@ -2078,6 +2078,29 @@ describe('OrderBook', function() {
     assert.strictEqual(book._offers[0].quality, '75977580.74206542');
   });
 
+  it('Insert offer - XRP gets quality calculation', function() {
+    const book = createOrderBook({
+      currency_gets: 'XRP',
+      currency_pays: 'USD',
+      issuer_pays: addresses.ISSUER
+    });
+
+    book._subscribed = true;
+    book._waitingForOffers = false;
+    book._issuerTransferRate = new IOUValue('1.000000000');
+
+    book._insertOffer(OrderBookUtils.getAffectedNodes(
+      fixtures.transactionWithCreatedOfferR({
+      amount: '200'
+    }).meta)[0]);
+
+    assert.strictEqual(book._offers.length, 1);
+
+    assert.strictEqual(book._offers[0].TakerPays.value, '200');
+    assert.strictEqual(book._offers[0].TakerGets, fixtures.TAKER_PAYS);
+    assert.strictEqual(book._offers[0].quality, '0.000000051568422101479');
+  });
+
   it('Insert offer - best quality - insufficient funds for all offers', function() {
     const book = createOrderBook({
       currency_gets: 'USD',

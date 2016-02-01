@@ -541,7 +541,7 @@ class OrderBook extends EventEmitter {
       log.info('_processTransactionNode', isOfferCancel, node);
     }
     switch (node.nodeType) {
-      case 'DeletedNode':
+      case 'DeletedNode': {
         this._validateAccount(node.fields.Account);
         this._deleteOffer(node, isOfferCancel);
 
@@ -553,8 +553,8 @@ class OrderBook extends EventEmitter {
             .add(parseRippledAmount(node.fieldsFinal.TakerPays));
         }
         break;
-
-      case 'ModifiedNode':
+      }
+      case 'ModifiedNode': {
         this._validateAccount(node.fields.Account);
         this._modifyOffer(node);
 
@@ -566,8 +566,8 @@ class OrderBook extends EventEmitter {
           .add(parseRippledAmount(node.fieldsPrev.TakerPays))
           .subtract(parseRippledAmount(node.fieldsFinal.TakerPays));
         break;
-
-      case 'CreatedNode':
+      }
+      case 'CreatedNode': {
         this._validateAccount(node.fields.Account);
         // rippled does not set owner_funds if the order maker is the issuer
         // because the value would be infinite
@@ -576,6 +576,7 @@ class OrderBook extends EventEmitter {
         this._setOwnerFunds(node.fields.Account, fundedAmount);
         this._insertOffer(node);
         break;
+      }
     }
   }
 
@@ -603,7 +604,7 @@ class OrderBook extends EventEmitter {
       this._requestTransferRate().then(() => {
         // Defer until transfer rate is requested
         this._updateFundedAmounts(transaction);
-      }, (err) => {
+      }, err => {
         log.error(
           'Failed to request transfer rate, will not update funded amounts: '
           + err.toString());
@@ -621,7 +622,7 @@ class OrderBook extends EventEmitter {
         String(affectedNodes.length));
     }
 
-    affectedNodes.forEach((node) => {
+    affectedNodes.forEach(node => {
       if (this._isBalanceChangeNode(node)) {
         const result = this._parseAccountBalanceFromNode(node);
 
@@ -811,19 +812,15 @@ class OrderBook extends EventEmitter {
       log.info('inserting offer', this._key, node.fields);
     }
 
+    const originalLength = this._offers.length;
     const offer = OrderBook._offerRewrite(node.fields);
-    const takerGets = parseRippledAmount(offer.TakerGets);
-    // HACK. XRPValue kill precision
-    const takerPays =
-      new IOUValue(OrderBookUtils.getValueFromRippledAmount(offer.TakerPays));
+    const takerGets = new IOUValue(offer.TakerGets.value || offer.TakerGets);
+    const takerPays = new IOUValue(offer.TakerPays.value || offer.TakerPays);
 
+     // We're safe to calculate quality for newly created offers
+    offer.quality = takerPays.divide(takerGets).toFixed();
     offer.LedgerEntryType = node.entryType;
     offer.index = node.ledgerIndex;
-
-    // We're safe to calculate quality for newly created offers
-    offer.quality = takerPays.divide(takerGets).toFixed();
-
-    const originalLength = this._offers.length;
 
     for (let i = 0; i < originalLength; i++) {
       if (offer.qualityHex <= this._offers[i].qualityHex) {
@@ -915,7 +912,7 @@ class OrderBook extends EventEmitter {
 
     this._resetOwnerOfferTotal(account);
 
-    this._offers.forEach((offer) => {
+    this._offers.forEach(offer => {
       if (offer.Account !== account) {
         return;
       }
@@ -1000,7 +997,7 @@ class OrderBook extends EventEmitter {
       return Promise.resolve(this._issuerTransferRate);
     }
 
-    return this._api.getSettings(this._issuerGets, {}).then((settings) => {
+    return this._api.getSettings(this._issuerGets, {}).then(settings => {
       // When transfer rate is not explicitly set on account, it implies the
       // default transfer rate
       this._transferRateIsDefault = !Boolean(settings.transferRate);
@@ -1061,7 +1058,7 @@ class OrderBook extends EventEmitter {
       this._computeAutobridgedOffersWrapper();
 
       return new Promise(resolve => {
-        this.once('model', (offers) => {
+        this.once('model', offers => {
           this._waitingForOffers = false;
           resolve(offers);
         });
@@ -1310,7 +1307,7 @@ class OrderBook extends EventEmitter {
   }
 
   _emitAsync(args: Array<any>): void {
-    setTimeout(() => this.emit.apply(this, args), 0);
+    setTimeout(() => this.emit(...args), 0);
   }
 
   /**
