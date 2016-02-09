@@ -14,7 +14,7 @@
     "compile": "babel -D --optional runtime -d dist/npm/ src/",
     "prepublish": "npm run clean && npm run compile",
     "test": "istanbul test _mocha",
-    "lint": "if ! [ -f eslintrc ]; then curl -o eslintrc 'https://raw.githubusercontent.com/ripple/javascript-style-guide/es6/eslintrc'; echo 'parser: babel-eslint' >> eslintrc; fi; eslint -c eslintrc src/"
+    "lint": "if ! [ -f eslintrc ]; then curl -o eslintrc 'https://raw.githubusercontent.com/ripple/javascript-style-guide/es6/eslintrc'; echo 'parser: babel-eslint' >> eslintrc; fi; eslint -c eslintrc Gulpfile.js **/*.js"
   },
   "repository": {
     "type": "git",

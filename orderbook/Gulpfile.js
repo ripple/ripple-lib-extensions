@@ -1,3 +1,7 @@
+/* eslint-disable no-var, no-param-reassign */
+/* these eslint rules are disabled because gulp does not support babel yet */
+'use strict';
+
 var gulp = require('gulp');
 var webpack = require('webpack-stream');
 var uglify = require('gulp-uglify');

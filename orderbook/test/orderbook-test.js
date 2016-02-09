@@ -516,7 +516,7 @@ describe('OrderBook', function() {
       });
     };
 
-    return book._requestTransferRate().then((rate) => {
+    return book._requestTransferRate().then(rate => {
       assert(rate.equals(new IOUValue('1.002000000')));
     });
   });
@@ -1679,7 +1679,7 @@ describe('OrderBook', function() {
     book._processTransaction(message);
 
     assert.strictEqual(book._offers.length, 0);
-    assert.throws(() =>{
+    assert.throws(() => {
       book._getOwnerFunds(addresses.ACCOUNT);
     });
   });

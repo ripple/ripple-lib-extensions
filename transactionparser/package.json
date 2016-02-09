@@ -6,7 +6,7 @@
   "scripts": {
     "test": "NODE_ENV=test ./node_modules/.bin/istanbul test ./node_modules/.bin/_mocha -- --reporter spec test/*-test.js",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
-    "lint": "./node_modules/.bin/eslint --reset -c ./eslint.json ./src/*.js"
+    "lint": "./node_modules/.bin/eslint -c ./eslintrc Gulpfile.js **/*.js"
   },
   "repository": {
     "type": "git",
