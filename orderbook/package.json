@@ -33,7 +33,7 @@
     "lodash": "^3.10.1",
     "babel-runtime": "^5.8.29",
     "ripple-address-codec": "^2.0.1",
-    "ripple-binary-codec": "^0.0.6",
+    "ripple-binary-codec": "^0.1.2",
     "ripple-lib-value": "0.1.0"
   },
   "devDependencies": {
