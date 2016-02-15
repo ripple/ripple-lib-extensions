@@ -96,13 +96,13 @@ function logMessage(logLevel: number, args: Array<any>) {
   switch (logLevel) {
     case 1:
     case 2:
-      console.log.apply(console, args);
+      console.log(...args);
       break;
     case 3:
-      console.warn.apply(console, args);
+      console.warn(...args);
       break;
     case 4:
-      console.error.apply(console, args);
+      console.error(...args);
       break;
   }
 }

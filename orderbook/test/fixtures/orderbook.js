@@ -859,6 +859,51 @@ module.exports.transactionWithCreatedOffer = function(options) {
   };
 };
 
+module.exports.transactionWithCreatedOfferR = function(options) {
+  options = options || {};
+  _.defaults(options, {
+    account: addresses.ACCOUNT,
+    amount: '1.9951'
+  });
+
+  const takerGets = new IOUValue(options.amount);
+  const takerPays = new XRPValue(module.exports.TAKER_PAYS);
+  const quality = takerPays.divide(takerGets);
+
+  const BookDirectory = binary.encodeQuality(quality.toString());
+
+  const meta = {
+    AffectedNodes: [
+      {
+        CreatedNode: {
+          LedgerEntryType: 'Offer',
+          LedgerIndex: 'AF3C702057C9C47DB9E809FD8C76CD22521012C5CC7AE95D914EC9E226F1D7E5',
+          NewFields: {
+            Account: options.account,
+            BookDirectory: BookDirectory,
+            Flags: 131072,
+            Sequence: 1404,
+            TakerPays: {
+              currency: 'USD',
+              issuer: addresses.ISSUER,
+              value: options.amount
+            },
+            TakerGets: module.exports.TAKER_PAYS
+          }
+        }
+      }
+    ]
+  };
+
+  return {
+    meta: meta,
+    transaction: {
+      TransactionType: 'OfferCreate',
+      owner_funds: '2010.027702881682'
+    }
+  };
+};
+
 module.exports.transactionWithDeletedOffer = function(options) {
   options = options || {};
   _.defaults(options, {

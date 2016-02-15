@@ -36,15 +36,18 @@ describe.skip('regression test', function() {
       let response = {};
 
       switch (message.command) {
-        case 'subscribe':
+        case 'subscribe': {
           break;
-        case 'account_info':
+        }
+        case 'account_info': {
           response = regression.account_info;
           break;
-        case 'book_offers':
+        }
+        case 'book_offers': {
           const key = message.taker_gets.currency + message.taker_pays.currency;
           response = regression.book_offers[key];
           break;
+        }
       }
       return Promise.resolve(response);
     };
@@ -62,7 +65,7 @@ describe.skip('regression test', function() {
     }
 
     function normalizeResult(offers) {
-      offers.forEach((offer) => {
+      offers.forEach(offer => {
         offer.TakerGets.currency = normalizeCurrency(offer.TakerGets.currency);
         offer.TakerPays.currency = normalizeCurrency(offer.TakerPays.currency);
       });

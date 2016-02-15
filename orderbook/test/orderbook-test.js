@@ -516,7 +516,7 @@ describe('OrderBook', function() {
       });
     };
 
-    return book._requestTransferRate().then((rate) => {
+    return book._requestTransferRate().then(rate => {
       assert(rate.equals(new IOUValue('1.002000000')));
     });
   });
@@ -1621,7 +1621,7 @@ describe('OrderBook', function() {
     const offer2 = fixtures.transactionWithCreatedOffer();
     const offer3 = fixtures.transactionWithCreatedOffer();
 
-    book._api.emit('ledgerClosed', {transactionCount: 3});
+    book._api.emit('ledger', {transactionCount: 3});
 
     book._api.connection.emit('transaction', offer);
     book._api.connection.emit('transaction', offer2);
@@ -1679,7 +1679,7 @@ describe('OrderBook', function() {
     book._processTransaction(message);
 
     assert.strictEqual(book._offers.length, 0);
-    assert.throws(() =>{
+    assert.throws(() => {
       book._getOwnerFunds(addresses.ACCOUNT);
     });
   });
@@ -1720,7 +1720,7 @@ describe('OrderBook', function() {
 
     const message = fixtures.transactionWithDeletedOffer();
 
-    book._api.emit('ledgerClosed', {transactionCount: 1});
+    book._api.emit('ledger', {transactionCount: 1});
 
     book._api.connection.emit('transaction', message);
 
@@ -1878,7 +1878,7 @@ describe('OrderBook', function() {
 
     const message = fixtures.transactionWithModifiedOffer();
 
-    book._api.emit('ledgerClosed', {transactionCount: 1});
+    book._api.emit('ledger', {transactionCount: 1});
 
     book._api.connection.emit('transaction', message);
 
@@ -2076,6 +2076,29 @@ describe('OrderBook', function() {
     assert.strictEqual(book._offers[0].taker_gets_funded, '51.04587961502088');
     assert.strictEqual(book._offers[0].taker_pays_funded, fixtures.TAKER_PAYS);
     assert.strictEqual(book._offers[0].quality, '75977580.74206542');
+  });
+
+  it('Insert offer - XRP gets quality calculation', function() {
+    const book = createOrderBook({
+      currency_gets: 'XRP',
+      currency_pays: 'USD',
+      issuer_pays: addresses.ISSUER
+    });
+
+    book._subscribed = true;
+    book._waitingForOffers = false;
+    book._issuerTransferRate = new IOUValue('1.000000000');
+
+    book._insertOffer(OrderBookUtils.getAffectedNodes(
+      fixtures.transactionWithCreatedOfferR({
+      amount: '200'
+    }).meta)[0]);
+
+    assert.strictEqual(book._offers.length, 1);
+
+    assert.strictEqual(book._offers[0].TakerPays.value, '200');
+    assert.strictEqual(book._offers[0].TakerGets, fixtures.TAKER_PAYS);
+    assert.strictEqual(book._offers[0].quality, '0.000000051568422101479');
   });
 
   it('Insert offer - best quality - insufficient funds for all offers', function() {
@@ -2355,7 +2378,7 @@ describe('OrderBook', function() {
 
     assert(book._offers.length === 3);
 
-    book._api.emit('ledgerClosed', {
+    book._api.emit('ledger', {
       ledger_time: d1
     });
 

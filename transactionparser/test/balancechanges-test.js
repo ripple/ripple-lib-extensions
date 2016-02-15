@@ -1,3 +1,5 @@
+'use strict';
+
 var assert = require('assert-diff');
 var fs = require('fs');
 var parseBalanceChanges = require('../src/index').parseBalanceChanges;
@@ -5,14 +7,18 @@ var parseBalanceChanges = require('../src/index').parseBalanceChanges;
 // Pay 100 XRP from rKmB to rLDY to create rLDY account
 var createAccountBalanceChanges = {
   rLDYrujdKUfVx28T9vRDAbyJ7G2WVXKo4K: [
-    { value: '100',
-    currency: 'XRP',
-    counterparty: ''}
+    {
+      value: '100',
+      currency: 'XRP',
+      counterparty: ''
+    }
   ],
   rKmBGxocj9Abgy25J51Mk1iqFzW9aVF9Tc: [
-    { value: '-100.012',
-    currency: 'XRP',
-    counterparty: '' }
+    {
+      value: '-100.012',
+      currency: 'XRP',
+      counterparty: ''
+    }
   ]
 };
 
@@ -31,11 +37,13 @@ var usdFirstPaymentBalanceChanges = {
     }
   ],
   rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q: [
-    { counterparty: 'rKmBGxocj9Abgy25J51Mk1iqFzW9aVF9Tc',
+    {
+      counterparty: 'rKmBGxocj9Abgy25J51Mk1iqFzW9aVF9Tc',
       currency: 'USD',
       value: '0.01'
     },
-    { counterparty: 'rLDYrujdKUfVx28T9vRDAbyJ7G2WVXKo4K',
+    {
+      counterparty: 'rLDYrujdKUfVx28T9vRDAbyJ7G2WVXKo4K',
       currency: 'USD',
       value: '-0.01'
     }
@@ -81,7 +89,7 @@ var usdFullPaymentBalanceChanges = {
       currency: 'XRP',
       counterparty: ''
     }
-  ],
+  ]
 };
 
 // Pay 0.01 USD from rKmB to rLDY where rLDY starts with 0.01 USD
@@ -109,25 +117,26 @@ var setTrustlineBalanceChanges2 = {
   ]
 };
 
-// Set trust limit to 100 USD with balance of 10 USD on rLDY when it has no trustline
+// Set trust limit to 100 USD with balance of 10 USD
+// on rLDY when it has no trustline
 var createTrustlineBalanceChanges = {
   rLDYrujdKUfVx28T9vRDAbyJ7G2WVXKo4K: [
     {
-      counterparty: "rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q",
-      currency: "USD",
-      value: "10"
+      counterparty: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q',
+      currency: 'USD',
+      value: '10'
     },
     {
-      counterparty: "",
-      currency: "XRP",
-      value: "-0.012"
+      counterparty: '',
+      currency: 'XRP',
+      value: '-0.012'
     }
   ],
   rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q: [
     {
-      counterparty: "rLDYrujdKUfVx28T9vRDAbyJ7G2WVXKo4K",
-      currency: "USD",
-      value: "-10"
+      counterparty: 'rLDYrujdKUfVx28T9vRDAbyJ7G2WVXKo4K',
+      currency: 'USD',
+      value: '-10'
     }
   ]
 };
@@ -136,37 +145,37 @@ var createTrustlineBalanceChanges = {
 // Pay 0.02 USD from rLDY to rKmB when rLDY has a trust limit of 0
 // for USD, but still has a balance of 0.02 USD; which closes the trustline
 var deleteTrustlineBalanceChanges = {
-    rKmBGxocj9Abgy25J51Mk1iqFzW9aVF9Tc: [
-      {
-        value: '0.02',
-        currency: 'USD',
-        counterparty: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'
-      }
-    ],
-    rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q: [
-      {
-        value: '-0.02',
-        currency: 'USD',
-        counterparty: 'rKmBGxocj9Abgy25J51Mk1iqFzW9aVF9Tc'
-      },
-      {
-        value: '0.02',
-        currency: 'USD',
-        counterparty: 'rLDYrujdKUfVx28T9vRDAbyJ7G2WVXKo4K'
-      }
-    ],
-    rLDYrujdKUfVx28T9vRDAbyJ7G2WVXKo4K: [
-      {
-        value: '-0.02',
-        currency: 'USD',
-        counterparty: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'
-      },
-      {
-        value: '-0.012',
-        currency: 'XRP',
-        counterparty: ''
-      }
-    ],
+  rKmBGxocj9Abgy25J51Mk1iqFzW9aVF9Tc: [
+    {
+      value: '0.02',
+      currency: 'USD',
+      counterparty: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'
+    }
+  ],
+  rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q: [
+    {
+      value: '-0.02',
+      currency: 'USD',
+      counterparty: 'rKmBGxocj9Abgy25J51Mk1iqFzW9aVF9Tc'
+    },
+    {
+      value: '0.02',
+      currency: 'USD',
+      counterparty: 'rLDYrujdKUfVx28T9vRDAbyJ7G2WVXKo4K'
+    }
+  ],
+  rLDYrujdKUfVx28T9vRDAbyJ7G2WVXKo4K: [
+    {
+      value: '-0.02',
+      currency: 'USD',
+      counterparty: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'
+    },
+    {
+      value: '-0.012',
+      currency: 'XRP',
+      counterparty: ''
+    }
+  ]
 };
 
 var redeemBalanceChanges = {
@@ -188,7 +197,7 @@ var redeemBalanceChanges = {
       counterparty: '',
       value: '-0.00001'
     }
-  ],
+  ]
 };
 
 var redeemThenIssueBalanceChanges = {
@@ -214,48 +223,81 @@ var redeemThenIssueBalanceChanges = {
 };
 
 var multipathBalanceChanges = {
-  rrnsYgWn13Z28GtRgznrSUsLfMkvsXCZSu:
-   [ { counterparty: 'r4nmQNH4Fhjfh6cHDbvVSsBv7KySbj4cBf',
-       currency: 'USD',
-       value: '100' },
-     { counterparty: 'rnYDWQaRdMb5neCGgvFfhw3MBoxmv5LtfH',
-       currency: 'USD',
-       value: '-100' } ],
-  r4nmQNH4Fhjfh6cHDbvVSsBv7KySbj4cBf:
-   [ { counterparty: 'rrnsYgWn13Z28GtRgznrSUsLfMkvsXCZSu',
-       currency: 'USD',
-       value: '-100' },
-     { counterparty: '', currency: 'XRP', value: '-0.00001' },
-     { counterparty: 'rJsaPnGdeo7BhMnHjuc3n44Mf7Ra1qkSVJ',
-       currency: 'USD',
-       value: '-100' },
-     { counterparty: 'rGpeQzUWFu4fMhJHZ1Via5aqFC3A5twZUD',
-       currency: 'USD',
-       value: '-100' } ],
-  rJsaPnGdeo7BhMnHjuc3n44Mf7Ra1qkSVJ:
-   [ { counterparty: 'r4nmQNH4Fhjfh6cHDbvVSsBv7KySbj4cBf',
-       currency: 'USD',
-       value: '100' },
-     { counterparty: 'rnYDWQaRdMb5neCGgvFfhw3MBoxmv5LtfH',
-       currency: 'USD',
-       value: '-100' } ],
-  rGpeQzUWFu4fMhJHZ1Via5aqFC3A5twZUD:
-   [ { counterparty: 'r4nmQNH4Fhjfh6cHDbvVSsBv7KySbj4cBf',
-       currency: 'USD',
-       value: '100' },
-     { counterparty: 'rnYDWQaRdMb5neCGgvFfhw3MBoxmv5LtfH',
-       currency: 'USD',
-       value: '-100' } ],
-  rnYDWQaRdMb5neCGgvFfhw3MBoxmv5LtfH:
-   [ { counterparty: 'rJsaPnGdeo7BhMnHjuc3n44Mf7Ra1qkSVJ',
-       currency: 'USD',
-       value: '100' },
-     { counterparty: 'rrnsYgWn13Z28GtRgznrSUsLfMkvsXCZSu',
-       currency: 'USD',
-       value: '100' },
-     { counterparty: 'rGpeQzUWFu4fMhJHZ1Via5aqFC3A5twZUD',
-       currency: 'USD',
-       value: '100' } ]
+  rrnsYgWn13Z28GtRgznrSUsLfMkvsXCZSu: [
+    {
+      counterparty: 'r4nmQNH4Fhjfh6cHDbvVSsBv7KySbj4cBf',
+      currency: 'USD',
+      value: '100'
+    },
+    {
+      counterparty: 'rnYDWQaRdMb5neCGgvFfhw3MBoxmv5LtfH',
+      currency: 'USD',
+      value: '-100'
+    }
+  ],
+  r4nmQNH4Fhjfh6cHDbvVSsBv7KySbj4cBf: [
+    {
+      counterparty: 'rrnsYgWn13Z28GtRgznrSUsLfMkvsXCZSu',
+      currency: 'USD',
+      value: '-100'
+    },
+    {
+      counterparty: '',
+      currency: 'XRP',
+      value: '-0.00001'
+    },
+    {
+      counterparty: 'rJsaPnGdeo7BhMnHjuc3n44Mf7Ra1qkSVJ',
+      currency: 'USD',
+      value: '-100'
+    },
+    {
+      counterparty: 'rGpeQzUWFu4fMhJHZ1Via5aqFC3A5twZUD',
+      currency: 'USD',
+      value: '-100'
+    }
+  ],
+  rJsaPnGdeo7BhMnHjuc3n44Mf7Ra1qkSVJ: [
+    {
+      counterparty: 'r4nmQNH4Fhjfh6cHDbvVSsBv7KySbj4cBf',
+      currency: 'USD',
+      value: '100'
+    },
+    {
+      counterparty: 'rnYDWQaRdMb5neCGgvFfhw3MBoxmv5LtfH',
+      currency: 'USD',
+      value: '-100'
+    }
+  ],
+  rGpeQzUWFu4fMhJHZ1Via5aqFC3A5twZUD: [
+    {
+      counterparty: 'r4nmQNH4Fhjfh6cHDbvVSsBv7KySbj4cBf',
+      currency: 'USD',
+      value: '100'
+    },
+    {
+      counterparty: 'rnYDWQaRdMb5neCGgvFfhw3MBoxmv5LtfH',
+      currency: 'USD',
+      value: '-100'
+    }
+  ],
+  rnYDWQaRdMb5neCGgvFfhw3MBoxmv5LtfH: [
+    {
+      counterparty: 'rJsaPnGdeo7BhMnHjuc3n44Mf7Ra1qkSVJ',
+      currency: 'USD',
+      value: '100'
+    },
+    {
+      counterparty: 'rrnsYgWn13Z28GtRgznrSUsLfMkvsXCZSu',
+      currency: 'USD',
+      value: '100'
+    },
+    {
+      counterparty: 'rGpeQzUWFu4fMhJHZ1Via5aqFC3A5twZUD',
+      currency: 'USD',
+      value: '100'
+    }
+  ]
 };
 
 // Set trust limit to zero on rLDY when it has a balance of 0.02 USD
