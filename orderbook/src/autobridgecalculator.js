@@ -140,6 +140,15 @@ class AutobridgeCalculator {
         legTwoPointer++;
       }
 
+      // calculate quality from leg qualities
+      const legOneQuality = new IOUValue(legOneOffer.quality);
+      const legTwoQuality = new IOUValue(legTwoOffer.quality);
+      autobridgedOffer.quality =
+        legOneQuality.multiply(legTwoQuality).toFixed();
+      autobridgedOffer.BookDirectory =
+        Utils.convertOfferQualityToHexFromText(autobridgedOffer.quality);
+      autobridgedOffer.qualityHex = autobridgedOffer.BookDirectory;
+
       offersAutobridged.push(autobridgedOffer);
     }
 
@@ -255,7 +264,6 @@ class AutobridgeCalculator {
     assert(takerPays instanceof IOUValue, 'Autobridged taker pays is invalid');
 
     const autobridgedOffer = {};
-    const quality = takerPays.divide(takerGets);
 
     autobridgedOffer.TakerGets = {
       value: takerGets.toFixed(),
@@ -269,16 +277,9 @@ class AutobridgeCalculator {
       issuer: this._issuerPays
     };
 
-    autobridgedOffer.quality = quality.toFixed();
-
     autobridgedOffer.taker_gets_funded = autobridgedOffer.TakerGets.value;
     autobridgedOffer.taker_pays_funded = autobridgedOffer.TakerPays.value;
-
     autobridgedOffer.autobridged = true;
-
-    autobridgedOffer.BookDirectory =
-      Utils.convertOfferQualityToHexFromText(autobridgedOffer.quality);
-    autobridgedOffer.qualityHex = autobridgedOffer.BookDirectory;
 
     return autobridgedOffer;
   }
