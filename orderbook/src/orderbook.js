@@ -39,6 +39,7 @@ type CreateOrderbookOptions = {
   issuer_gets?: string,
   issuer_pays?: string,
   account?: string,
+  ledgerIndex?: string,
   trace?: boolean
 }
 
@@ -131,14 +132,15 @@ class OrderBook extends EventEmitter {
   _onTransactionBound: (transaction: Object) => void;
 
   constructor(api: Object, currencyGets: string, issuerGets?: string,
-    currencyPays: string, issuerPays?: string, account?: string, trace? = false
+    currencyPays: string, issuerPays?: string,
+    account?: string, ledgerIndex?: string, trace? = false
   ) {
     super();
 
     this._trace = trace;
     if (this._trace) {
       log.info('OrderBook:constructor', currencyGets, issuerGets, currencyPays,
-        issuerPays);
+        issuerPays, ledgerIndex);
     }
 
     this._api = api;
@@ -149,6 +151,7 @@ class OrderBook extends EventEmitter {
     this._issuerPays = issuerPays !== undefined ? issuerPays : '';
     this._key = prepareTrade(currencyGets, issuerGets) + ':' +
                 prepareTrade(currencyPays, issuerPays);
+    this._ledgerIndex = ledgerIndex;
 
     // When orderbook is IOU/IOU, there will be IOU/XRP and XRP/IOU
     // books that we must keep track of to compute autobridged offers
@@ -186,10 +189,10 @@ class OrderBook extends EventEmitter {
 
     if (this._isAutobridgeable) {
       this._legOneBook = new OrderBook(api, 'XRP', undefined,
-        currencyPays, issuerPays, account, this._trace);
+        currencyPays, issuerPays, account, this._ledgerIndex, this._trace);
 
       this._legTwoBook = new OrderBook(api, currencyGets, issuerGets,
-        'XRP', undefined, account, this._trace);
+        'XRP', undefined, account, this._ledgerIndex, this._trace);
     }
 
     this._initializeSubscriptionMonitoring();
@@ -208,7 +211,7 @@ class OrderBook extends EventEmitter {
   static createOrderBook(api, options: CreateOrderbookOptions): OrderBook {
     const orderbook = new OrderBook(api, options.currency_gets,
       options.issuer_gets, options.currency_pays, options.issuer_pays,
-      options.account, options.trace);
+      options.account, options.ledger_index, options.trace);
     return orderbook;
   }
 
@@ -362,11 +365,10 @@ class OrderBook extends EventEmitter {
       // Automatically subscribe and unsubscribe to orderbook
       // on the basis of existing event listeners
       if (_.contains(EVENTS, event)) {
+
         switch (action) {
           case 'add':
             if (++self._listeners === 1) {
-
-              self._api.on('ledger', onLedgerClosedWrapper);
 
               if (self._isAutobridgeable) {
                 if (self._legOneBook !== null && self._legOneBook !== undefined
@@ -381,7 +383,13 @@ class OrderBook extends EventEmitter {
                 }
               }
 
-              self._subscribe(true);
+
+              if (self._ledgerIndex) {
+                self._getHistoricalOrderbook();
+              } else {
+                self._api.on('ledger', onLedgerClosedWrapper);
+                self._subscribe(true);
+              }
             }
             break;
           case 'remove':
@@ -419,12 +427,15 @@ class OrderBook extends EventEmitter {
     this.on('removeListener', event => {
       listenersModified('remove', event);
     });
-
   }
 
   _onReconnect() {
     setTimeout(this._subscribe.bind(this, false), 1);
     setTimeout(this._subscribe.bind(this, true), 2);
+  }
+
+  _getHistoricalOrderbook() {
+    this._requestTransferRate().then(this._requestOffers.bind(this));
   }
 
   _subscribe(subscribe: boolean) {
@@ -1032,7 +1043,7 @@ class OrderBook extends EventEmitter {
     const requestMessage = _.extend({
       command: 'book_offers',
       taker: this._account ? this._account : 'rrrrrrrrrrrrrrrrrrrrBZbvji',
-      ledger_index: 'validated'
+      ledger_index: this._ledgerIndex || 'validated'
     }, this.toJSON());
 
     return this._api.connection.request(requestMessage).then(response => {
@@ -1042,10 +1053,15 @@ class OrderBook extends EventEmitter {
         throw new this._api.errors.RippleError('Invalid response');
       }
 
+      if (this._ledgerIndex) {
+        assert(response.ledger_index === this._ledgerIndex);
+      }
+
       if (this._trace) {
         log.info('requested offers', this._key,
           'offers: ' + response.offers.length);
       }
+
 
       this._setOffers(response.offers);
 
