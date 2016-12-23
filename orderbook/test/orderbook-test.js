@@ -2386,4 +2386,168 @@ describe('OrderBook', function() {
     assert(numModelEvents === 1);
     assert(numOfferRemovedEvents === 2);
   });
+
+  it('create historical order book', function(done) {
+    const options = {
+      currency_gets: 'USD',
+      issuer_gets: addresses.ISSUER,
+      currency_pays: 'XRP',
+      ledger_index: 123456
+    };
+    const book = createOrderBook(options);
+
+    book._api.isConnected = function() {
+      return true;
+    };
+
+    book._api.connection.request = function(message) {
+      const response = {};
+
+      if (message.command === 'account_info') {
+        response.account_data = {
+          TransferRate: 1002000000
+        };
+
+      } else if (message.command === 'book_offers') {
+        assert(message.ledger_index === options.ledger_index);
+
+        response.offers = [{
+          'Account': 'r9WMJQZZwYukHWJAKX7EGqgwgswnapVXXn',
+          'BookDirectory': '4627DFFCFF8B5A265EDBD8AE8C14A52325DBFEDAF4F5C32E5D0595B9C5964000',
+          'BookNode': '0000000000000000',
+          'Flags': 131072,
+          'LedgerEntryType': 'Offer',
+          'OwnerNode': '0000000000000000',
+          'PreviousTxnID': '0FCBEE97586F08CE8C9344AB769BDB167AA1F7346EEDCEB5398814AD8D7ADDB1',
+          'PreviousTxnLgrSeq': 25998845,
+          'Sequence': 1585,
+          'TakerGets': {
+            'currency': 'USD',
+            'issuer': 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B',
+            'value': '1000'
+          },
+          'TakerPays': '157200000000',
+          'index': '10D49439691AE1C2FBF227E697F44D93AD02B29ECACC2CEB9834413C652927F2',
+          'owner_funds': '5000',
+          'quality': '157200000'
+        }];
+
+        response.ledger_index = options.ledger_index;
+      }
+
+      return Promise.resolve(response);
+    };
+
+    book.on('model', function(offers) {
+      assert.strictEqual(offers.length, 1);
+      done();
+    });
+  });
+
+  it('create historical order book (autobridged)', function(done) {
+    const options = {
+      currency_gets: 'USD',
+      issuer_gets: addresses.ISSUER,
+      currency_pays: 'BTC',
+      issuer_pays: addresses.ISSUER,
+      ledger_index: 123456
+    };
+    const book = createOrderBook(options);
+    const rippled_offers = {
+      XRPBTC: [{
+        'Account': 'rBWVP27pWkp7RRy3ry5T7an7hJUQdJfCDR',
+        'BookDirectory': '37AAC93D336021AE94310D0430FFA090F7137C97D473488C491A0F8E01CF5BA7',
+        'BookNode': '0000000000000000',
+        'Flags': 0,
+        'LedgerEntryType': 'Offer',
+        'OwnerNode': '000000000000001D',
+        'PreviousTxnID': '0000000000000000000000000000000000000000000000000000000000000000',
+        'PreviousTxnLgrSeq': 0,
+        'Sequence': 22448923,
+        'TakerGets': '11882350298',
+        'TakerPays': {
+          'currency': 'BTC',
+          'issuer': 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B',
+          'value': '0.08716241007537089'
+        },
+        'index': '1292193CB4034FEFF0D8D2D0000AE622AFAC448CF1EAAF6DE6285891B119AD2C',
+        'owner_funds': '104760699390',
+        'quality': '7335451984616359e-27'
+      }],
+      USDXRP: [{
+        'Account': 'rhZ3EktwDsz7sP52PeqL11yJw5EJqvcGSR',
+        'BookDirectory': '4627DFFCFF8B5A265EDBD8AE8C14A52325DBFEDAF4F5C32E5D05B41E5D68032B',
+        'BookNode': '0000000000000000',
+        'Flags': 0,
+        'LedgerEntryType': 'Offer',
+        'OwnerNode': '0000000000000000',
+        'PreviousTxnID': '2F182A1CCD45C24C2D689149BAE0EB8F01E15BB3A07345F5E4F1567631CCB952',
+        'PreviousTxnLgrSeq': 26431760,
+        'Sequence': 133792,
+        'TakerGets': {
+          'currency': 'USD',
+          'issuer': 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B',
+          'value': '266.40355205'
+        },
+        'TakerPays': '42768889593',
+        'index': 'CF077143BBD17ED6AA78F5A9B89F5C922FE49B45F32D223C600EA61CE5C88B35',
+        'owner_funds': '1255.922848641749',
+        'quality': '160541739.2669483'
+      }],
+      USDBTC: [{
+        'Account': 'rME8Sxc66TxWhJLmd2zzmQZzFB8pR1gGSR',
+        'BookDirectory': '20294C923E80A51B487EB9547B3835FD483748B170D2D0A4520420651117E696',
+        'BookNode': '0000000000000000',
+        'Flags': 0,
+        'LedgerEntryType': 'Offer',
+        'OwnerNode': '0000000000000000',
+        'PreviousTxnID': '287F7E52C83A4D2770913BD985D0DD2CD12B671DBD57DE2444C473D948361D36',
+        'PreviousTxnLgrSeq': 26431788,
+        'Sequence': 115652,
+        'TakerGets': {
+          'currency': 'USD',
+          'issuer': 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B',
+          'value': '269.1821425'
+        },
+        'TakerPays': {
+          'currency': 'BTC',
+          'issuer': 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B',
+          'value': '0.31266'
+        },
+        'index': 'D78C09048FD0AE84FB705CB416B346472F6BD88D91C5905912D9FC1C24347646',
+        'owner_funds': '1871.049400514363',
+        'quality': '0.001161518357407382'
+      }]
+    };
+
+    book._api.isConnected = function() {
+      return true;
+    };
+
+    book._api.connection.request = function(message) {
+      const response = {};
+      let key;
+
+      if (message.command === 'account_info') {
+        response.account_data = {
+          TransferRate: 1002000000
+        };
+
+      } else if (message.command === 'book_offers') {
+        assert(message.ledger_index === options.ledger_index);
+        key = message.taker_gets.currency + message.taker_pays.currency;
+        response.offers = rippled_offers[key];
+        response.ledger_index = options.ledger_index;
+      }
+
+      return Promise.resolve(response);
+    };
+
+    book.on('model', function(offers) {
+      assert.strictEqual(offers.length, 2);
+      assert.strictEqual(offers[0].quality, '0.001161518357407382');
+      assert.strictEqual(offers[1].quality, '0.001177646219919498');
+      done();
+    });
+  });
 });
