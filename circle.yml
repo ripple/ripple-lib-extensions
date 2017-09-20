@@ -1,6 +1,6 @@
 machine:
   node:
-    version: 0.12.0
+    version: 6.1.0
 test:
   pre:
     - cd transactionparser && npm install
