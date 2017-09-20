@@ -18,12 +18,9 @@
     "ripple-lib",
     "ripple-lib-transactionparser"
   ],
-  "engines": {
-    "node": ">=0.10.0"
-  },
   "dependencies": {
     "bignumber.js": "^2.0.3",
-    "lodash": "^3.10.1"
+    "lodash": "^4.17.4"
   },
   "devDependencies": {
     "assert-diff": "*",

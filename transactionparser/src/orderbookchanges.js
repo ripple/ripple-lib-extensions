@@ -8,7 +8,7 @@ var parseQuality = require('./quality');
 var lsfSell = 0x00020000;   // see "lsfSell" flag in rippled source code
 
 function removeUndefined(obj) {
-  return _.omit(obj, _.isUndefined);
+  return _.omitBy(obj, _.isUndefined);
 }
 
 function convertOrderChange(order) {
