@@ -1,4 +1,4 @@
-'use strict';
+'use strict' // eslint-disable-line strict
 module.exports = {
   ACCOUNT: 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59',
   OTHER_ACCOUNT: 'rpZc4mVfWUif9CRoHRKKcmhu1nx2xktxBo',
@@ -7,4 +7,4 @@ module.exports = {
   ISSUER: 'rMH4UxPrbuMa1spCBR98hLLyNJp4d8p4tM',
   NOTFOUND: 'rajTAg3hon5Lcu1RxQQPxTgHvqfhc1EaUS',
   SECRET: 'shsWGZcmZz6YsWWmcnpfr6fLTdtFV'
-};
+}

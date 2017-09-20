@@ -1,36 +1,36 @@
 /* eslint-disable max-len, no-param-reassign */
 
-'use strict';
+'use strict' // eslint-disable-line strict
 
-const _ = require('lodash');
-const addresses = require('./addresses');
-const {XRPValue, IOUValue} = require('ripple-lib-value');
-const binary = require('ripple-binary-codec');
+const _ = require('lodash')
+const addresses = require('./addresses')
+const {XRPValue, IOUValue} = require('ripple-lib-value')
+const binary = require('ripple-binary-codec')
 
-module.exports.FIAT_BALANCE = '10';
-module.exports.NATIVE_BALANCE = '55';
-module.exports.NATIVE_BALANCE_PREVIOUS = '100';
+module.exports.FIAT_BALANCE = '10'
+module.exports.NATIVE_BALANCE = '55'
+module.exports.NATIVE_BALANCE_PREVIOUS = '100'
 
-module.exports.TAKER_GETS = '19.84580331';
-module.exports.TAKER_GETS_FINAL = '18.84580331';
-module.exports.TAKER_PAYS = '3878342440';
-module.exports.TAKER_PAYS_FINAL = '3078342440';
-module.exports.OTHER_TAKER_GETS = '4.9656112525';
-module.exports.OTHER_TAKER_GETS_FINAL = '3.9656112525';
-module.exports.OTHER_TAKER_PAYS = '972251352';
-module.exports.OTHER_TAKER_PAYS_FINAL = '902251352';
+module.exports.TAKER_GETS = '19.84580331'
+module.exports.TAKER_GETS_FINAL = '18.84580331'
+module.exports.TAKER_PAYS = '3878342440'
+module.exports.TAKER_PAYS_FINAL = '3078342440'
+module.exports.OTHER_TAKER_GETS = '4.9656112525'
+module.exports.OTHER_TAKER_GETS_FINAL = '3.9656112525'
+module.exports.OTHER_TAKER_PAYS = '972251352'
+module.exports.OTHER_TAKER_PAYS_FINAL = '902251352'
 
-module.exports.LEDGER_INDEX = '06AFB03237286C1566CD649CFD5388C2C1F5BEFC5C3302A1962682803A9946FA';
-module.exports.OTHER_LEDGER_INDEX = 'D3338DA77BA23122FB5647B74B53636AB54BE246D4B21707C9D6887DEB334252';
+module.exports.LEDGER_INDEX = '06AFB03237286C1566CD649CFD5388C2C1F5BEFC5C3302A1962682803A9946FA'
+module.exports.OTHER_LEDGER_INDEX = 'D3338DA77BA23122FB5647B74B53636AB54BE246D4B21707C9D6887DEB334252'
 
-module.exports.TRANSFER_RATE = '1.002000000';
+module.exports.TRANSFER_RATE = '1.002000000'
 
 module.exports.fiatOffers = function(options) {
-  options = options || {};
+  options = options || {}
   _.defaults(options, {
     account_funds: '318.3643710638508',
     other_account_funds: '235.0194163432668'
-  });
+  })
 
   return [
     {
@@ -102,8 +102,8 @@ module.exports.fiatOffers = function(options) {
       owner_funds: options.other_account_funds,
       quality: '195796912.5171664'
     }
-  ];
-};
+  ]
+}
 
 module.exports.NATIVE_OFFERS = [
   {
@@ -170,7 +170,7 @@ module.exports.NATIVE_OFFERS = [
     owner_funds: '235.0194163432668',
     quality: '195796912.5171664'
   }
-];
+]
 
 module.exports.REQUEST_OFFERS = [
   {
@@ -272,7 +272,7 @@ module.exports.REQUEST_OFFERS = [
     owner_funds: '0.950363009783092',
     quality: '199.4446703295291'
   }
-];
+]
 
 module.exports.REQUEST_OFFERS_NATIVE = [
   {
@@ -351,7 +351,7 @@ module.exports.REQUEST_OFFERS_NATIVE = [
     index: 'A437D85DF80D250F79308F2B613CF5391C7CF8EE9099BC4E553942651CD9FA86',
     quality: '0.049861167582382'
   }
-];
+]
 
 module.exports.QUALITY_OFFERS = [
   {
@@ -374,7 +374,7 @@ module.exports.QUALITY_OFFERS = [
     owner_funds: '5910.437716613066',
     quality: '75977580.74216543'
   }
-];
+]
 
 // This fixture is to exercise a bug where taker_pays_funded = taker_gets_funded * quality
 // has decimal amounts.
@@ -405,7 +405,7 @@ module.exports.DECIMAL_TAKER_PAYS_FUNDED_OFFERS = [
     },
     taker_pays_funded: '1704050437125'
   }
-];
+]
 
 module.exports.LEG_ONE_OFFERS = [
   {
@@ -469,7 +469,7 @@ module.exports.LEG_ONE_OFFERS = [
     owner_funds: '490342145233',
     quality: '0.0000000118746935190737'
   }
-];
+]
 
 module.exports.LEG_TWO_OFFERS = [
   {
@@ -517,16 +517,16 @@ module.exports.LEG_TWO_OFFERS = [
     },
     taker_pays_funded: '101336523096'
   }
-];
+]
 
 module.exports.bookOffersResponse = function(options) {
-  options = options || {};
+  options = options || {}
   _.defaults(options, {
     account_funds: '2010.027702881682',
     other_account_funds: '24.06086596039299',
     third_account_funds: '9071.40090264774',
     fourth_account_funds: '7244.053477923128'
-  });
+  })
 
   return {
     offers: [
@@ -636,8 +636,8 @@ module.exports.bookOffersResponse = function(options) {
         quality: '69707402.31897178'
       }
     ]
-  };
-};
+  }
+}
 
 module.exports.MODIFIED_NODES = [
   {
@@ -700,15 +700,15 @@ module.exports.MODIFIED_NODES = [
       PreviousTxnLgrSeq: 11676651
     }
   }
-];
+]
 
 module.exports.transactionWithRippleState = function(options) {
-  options = options || {};
+  options = options || {}
   _.defaults(options, {
     issuer: addresses.ISSUER,
     account: addresses.ACCOUNT,
     balance: module.exports.FIAT_BALANCE
-  });
+  })
 
   return {
     meta: {
@@ -748,16 +748,16 @@ module.exports.transactionWithRippleState = function(options) {
         }
       }]
     }
-  };
-};
+  }
+}
 
 module.exports.transactionWithAccountRoot = function(options) {
-  options = options || {};
+  options = options || {}
   _.defaults(options, {
     account: addresses.ACCOUNT,
     balance: module.exports.NATIVE_BALANCE,
     previous_balance: module.exports.NATIVE_BALANCE_PREVIOUS
-  });
+  })
 
   return {
     meta: {
@@ -782,15 +782,15 @@ module.exports.transactionWithAccountRoot = function(options) {
         }
       }]
     }
-  };
-};
+  }
+}
 
 module.exports.transactionWithInvalidAccountRoot = function(options) {
-  options = options || {};
+  options = options || {}
   _.defaults(options, {
     account: addresses.ACCOUNT,
     balance: module.exports.NATIVE_BALANCE
-  });
+  })
 
   return {
     meta: {
@@ -810,22 +810,22 @@ module.exports.transactionWithInvalidAccountRoot = function(options) {
         }
       }]
     }
-  };
-};
+  }
+}
 
 
 module.exports.transactionWithCreatedOffer = function(options) {
-  options = options || {};
+  options = options || {}
   _.defaults(options, {
     account: addresses.ACCOUNT,
     amount: '1.9951'
-  });
+  })
 
-  const takerGets = new IOUValue(options.amount);
-  const takerPays = new XRPValue(module.exports.TAKER_PAYS);
-  const quality = takerPays.divide(takerGets);
+  const takerGets = new IOUValue(options.amount)
+  const takerPays = new XRPValue(module.exports.TAKER_PAYS)
+  const quality = takerPays.divide(takerGets)
 
-  const BookDirectory = binary.encodeQuality(quality.toString());
+  const BookDirectory = binary.encodeQuality(quality.toString())
 
   const meta = {
     AffectedNodes: [
@@ -848,7 +848,7 @@ module.exports.transactionWithCreatedOffer = function(options) {
         }
       }
     ]
-  };
+  }
 
   return {
     meta: meta,
@@ -856,21 +856,21 @@ module.exports.transactionWithCreatedOffer = function(options) {
       TransactionType: 'OfferCreate',
       owner_funds: '2010.027702881682'
     }
-  };
-};
+  }
+}
 
 module.exports.transactionWithCreatedOfferR = function(options) {
-  options = options || {};
+  options = options || {}
   _.defaults(options, {
     account: addresses.ACCOUNT,
     amount: '1.9951'
-  });
+  })
 
-  const takerGets = new IOUValue(options.amount);
-  const takerPays = new XRPValue(module.exports.TAKER_PAYS);
-  const quality = takerPays.divide(takerGets);
+  const takerGets = new IOUValue(options.amount)
+  const takerPays = new XRPValue(module.exports.TAKER_PAYS)
+  const quality = takerPays.divide(takerGets)
 
-  const BookDirectory = binary.encodeQuality(quality.toString());
+  const BookDirectory = binary.encodeQuality(quality.toString())
 
   const meta = {
     AffectedNodes: [
@@ -893,7 +893,7 @@ module.exports.transactionWithCreatedOfferR = function(options) {
         }
       }
     ]
-  };
+  }
 
   return {
     meta: meta,
@@ -901,14 +901,14 @@ module.exports.transactionWithCreatedOfferR = function(options) {
       TransactionType: 'OfferCreate',
       owner_funds: '2010.027702881682'
     }
-  };
-};
+  }
+}
 
 module.exports.transactionWithDeletedOffer = function(options) {
-  options = options || {};
+  options = options || {}
   _.defaults(options, {
     transaction_type: 'OfferCreate'
-  });
+  })
 
   const meta = {
     AffectedNodes: [
@@ -936,7 +936,7 @@ module.exports.transactionWithDeletedOffer = function(options) {
         }
       }
     ]
-  };
+  }
 
   // meta.getAffectedBooks();
 
@@ -946,14 +946,14 @@ module.exports.transactionWithDeletedOffer = function(options) {
       TransactionType: options.transaction_type,
       owner_funds: '2010.027702881682'
     }
-  };
-};
+  }
+}
 
 module.exports.transactionWithDeletedOfferR = function(options) {
-  options = options || {};
+  options = options || {}
   _.defaults(options, {
     transaction_type: 'OfferCreate'
-  });
+  })
 
   const meta = {
     AffectedNodes: [
@@ -981,7 +981,7 @@ module.exports.transactionWithDeletedOfferR = function(options) {
         }
       }
     ]
-  };
+  }
 
   // meta.getAffectedBooks();
 
@@ -991,13 +991,13 @@ module.exports.transactionWithDeletedOfferR = function(options) {
       TransactionType: options.transaction_type,
       owner_funds: '2010.027702881682'
     }
-  };
-};
+  }
+}
 
 module.exports.transactionWithModifiedOffer = function() {
   const meta = {
     AffectedNodes: module.exports.MODIFIED_NODES.slice(0, 1)
-  };
+  }
 
   // meta.getAffectedBooks();
 
@@ -1007,13 +1007,13 @@ module.exports.transactionWithModifiedOffer = function() {
       TransactionType: 'OfferCreate',
       owner_funds: '2010.027702881682'
     }
-  };
-};
+  }
+}
 
 module.exports.transactionWithModifiedOffers = function() {
   const meta = {
     AffectedNodes: module.exports.MODIFIED_NODES
-  };
+  }
 
   // meta.getAffectedBooks();
 
@@ -1023,13 +1023,13 @@ module.exports.transactionWithModifiedOffers = function() {
       TransactionType: 'OfferCreate',
       owner_funds: '2010.027702881682'
     }
-  };
-};
+  }
+}
 
 module.exports.transactionWithNoNodes = function() {
   const meta = {
     AffectedNodes: []
-  };
+  }
 
   // meta.getAffectedBooks();
 
@@ -1039,14 +1039,14 @@ module.exports.transactionWithNoNodes = function() {
       TransactionType: 'OfferCreate',
       owner_funds: '2010.027702881682'
     }
-  };
-};
+  }
+}
 
 module.exports.accountInfoResponse = function(options) {
-  options = options || {};
+  options = options || {}
   _.defaults(options, {
     account: addresses.ISSUER
-  });
+  })
 
   return {
     account_data: {
@@ -1064,5 +1064,5 @@ module.exports.accountInfoResponse = function(options) {
       index: 'B7D526FDDF9E3B3F95C3DC97C353065B0482302500BBB8051A5C090B596C6133',
       urlgravatar: 'http:www.gravatar.com/avatar/5b33b93c7ffe384d53450fc666bb11fb'
     }
-  };
-};
+  }
+}
