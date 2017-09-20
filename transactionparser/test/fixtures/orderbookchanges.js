@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-'use strict';
+'use strict'
 
 exports.offerCreateNoChangeTakerGets = function() {
   return {
@@ -352,8 +352,8 @@ exports.offerCreateNoChangeTakerGets = function() {
       'TransactionResult': 'tesSUCCESS'
     },
     'validated': true
-  };
-};
+  }
+}
 
 exports.offerCreateConsumedOffer = function() {
   return {
@@ -734,8 +734,8 @@ exports.offerCreateConsumedOffer = function() {
       'TransactionResult': 'tesSUCCESS'
     },
     'validated': true
-  };
-};
+  }
+}
 
 exports.offerCreateCreatedOffer = function() {
   return {
@@ -832,8 +832,8 @@ exports.offerCreateCreatedOffer = function() {
       'TransactionResult': 'tesSUCCESS'
     },
     'validated': true
-  };
-};
+  }
+}
 
 exports.offerCancel = function() {
   return {
@@ -925,8 +925,8 @@ exports.offerCancel = function() {
       'TransactionResult': 'tesSUCCESS'
     },
     'validated': true
-  };
-};
+  }
+}
 
 exports.parsedOfferCreateNoChangeTakerGets = function() {
   return {
@@ -965,8 +965,8 @@ exports.parsedOfferCreateNoChangeTakerGets = function() {
         status: 'filled'
       }
     ]
-  };
-};
+  }
+}
 
 exports.parsedOfferCreate = function() {
   return {
@@ -1006,8 +1006,8 @@ exports.parsedOfferCreate = function() {
         'status': 'partially-filled'
       }
     ]
-  };
-};
+  }
+}
 
 exports.parsedOfferCreateCreated = function() {
   return {
@@ -1028,8 +1028,8 @@ exports.parsedOfferCreateCreated = function() {
         'status': 'created'
       }
     ]
-  };
-};
+  }
+}
 
 exports.parsedOfferCancel = function() {
   return {
@@ -1050,5 +1050,5 @@ exports.parsedOfferCancel = function() {
         'status': 'cancelled'
       }
     ]
-  };
-};
+  }
+}
