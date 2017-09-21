@@ -39,7 +39,7 @@ type CreateOrderbookOptions = {
   issuer_gets?: string,
   issuer_pays?: string,
   account?: string,
-  ledgerIndex?: string,
+  ledger_index?: string,
   trace?: boolean
 }
 
