@@ -3,12 +3,12 @@ ripple-lib-extensions
 
 A collection of packages that extend the functionality of ripple-lib.
 
-####Use in the Browser
+#### Use in the Browser
 These modules will need to be compiled for use in the browser.
 From the root directory of each module, run `$ npm install` then `$ gulp`
 The compiled libraries will be available in the `/dist/web` directory
 
-###Orderbook
+### Orderbook
 Live updating orderbook data from the Ripple Network.  Requires RippleAPI version 0.14.0 or greater.
 
 ```javascript
@@ -28,5 +28,8 @@ Live updating orderbook data from the Ripple Network.  Requires RippleAPI versio
   });
 ```
 
-###Transaction Parser
-###Message Signer
+### Transaction Parser
+Parses transaction objects to a higher-level view.
+
+### Message Signer
+Signs arbitrary data.
