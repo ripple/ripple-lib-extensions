@@ -1,4 +1,3 @@
-
 /* @flow */
 
 
@@ -102,6 +101,7 @@ class OrderBook extends EventEmitter {
   _legOneBook: ?OrderBook;
   _legTwoBook: ?OrderBook;
   _key: string;
+  _ledgerIndex: ?string;
   _api: Object;
   _currencyGets: string;
   _issuerGets: string;
@@ -133,7 +133,7 @@ class OrderBook extends EventEmitter {
 
   constructor(api: Object, currencyGets: string, issuerGets?: string,
     currencyPays: string, issuerPays?: string,
-    account?: string, ledgerIndex?: string, trace? = false
+    account?: string, ledgerIndex: ?string, trace?: boolean = false
   ) {
     super()
 
