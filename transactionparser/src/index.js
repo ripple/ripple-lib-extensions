@@ -8,5 +8,5 @@ module.exports.parseOrderbookChanges =
   require('./orderbookchanges').parseOrderbookChanges
 module.exports.getAffectedAccounts =
   require('./utils').getAffectedAccounts
-module.exports.parseChannelDetails = 
-  require('./channeldetails').parseChannelDetails;
+module.exports.parseChannelChanges = 
+  require('./channelchanges').parseChannelChanges;

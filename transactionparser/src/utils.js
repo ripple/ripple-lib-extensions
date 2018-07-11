@@ -10,14 +10,14 @@ function dropsToXRP(drops) {
 function normalizeNode(affectedNode) {
   var diffType = Object.keys(affectedNode)[0]
   var node = affectedNode[diffType]
-  return {
+  return Object.assign({}, node, {
     diffType: diffType,
     entryType: node.LedgerEntryType,
     ledgerIndex: node.LedgerIndex,
     newFields: node.NewFields || {},
     finalFields: node.FinalFields || {},
     previousFields: node.PreviousFields || {}
-  }
+  })
 }
 
 function normalizeNodes(metadata) {
