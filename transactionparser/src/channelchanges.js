@@ -68,7 +68,8 @@ function summarizePaymentChannel(node) {
         channelBalanceDrops:
           new BigNumber(final.Balance || 0).toString(10),
 
-        // Use this to see the history of transactions that affected this payment channel object.
+        // The identifying hash of the transaction that most recently modified this payment channel object.
+        // You can use this to retrieve the object's history.
         previousTxnId: node.PreviousTxnID
       };
 }
