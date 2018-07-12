@@ -58,15 +58,15 @@ describe('parseChannelChanges', function() {
       channelId: 'EC4DACE3360DCBF76FE80874931F2C75C5B4B6A05D615FA3E62DFF2BE34A8ACB',
       source: 'rpyC4JM5kifsNG6YbARDAxAJQLBDZw9ZFQ',
       destination: 'rJNa71cLCjzQG68oNjh4fCUqCZSGNkWDrM',
-      channel_amount_change_drops: undefined,
-      channel_balance_change_drops: '10000',
-      channel_amount_drops: '10000000',
-      channel_balance_drops: '40000',
-      prev_tx: '5E854E78A51C45FC626C61924C20EA25670EF18E5609DA5F1F7898E833DCB257',
-      channel_amount_change: undefined,
-      channel_balance_change: '0.01',
-      channel_amount: '10',
-      channel_balance: '0.04'
+      channelAmountChangeDrops: undefined,
+      channelBalanceChangeDrops: '10000',
+      channelAmountDrops: '10000000',
+      channelBalanceDrops: '40000',
+      previousTxnId: '5E854E78A51C45FC626C61924C20EA25670EF18E5609DA5F1F7898E833DCB257',
+      channelAmountChange: undefined,
+      channelBalanceChange: '0.01',
+      channelAmount: '10',
+      channelBalance: '0.04'
     }
     assert.deepEqual(result, expectedResult)
   })

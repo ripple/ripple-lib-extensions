@@ -41,14 +41,14 @@ function summarizePaymentChannel(node) {
 
         // The change in the number of XRP drops allocated to this channel.
         // This is positive if this is a PaymentChannelFund transaction.
-        channel_amount_change_drops: prev.Amount ? 
+        channelAmountChangeDrops: prev.Amount ? 
           new BigNumber(final.Amount)
           .minus(new BigNumber(prev.Amount || 0))
           .toString(10) :
           undefined,
 
         // The change in the number of XRP drops already paid out by the channel.
-        channel_balance_change_drops: final.Balance ? 
+        channelBalanceChangeDrops: final.Balance ? 
           new BigNumber(final.Balance)
           .minus(new BigNumber(prev.Balance || 0))
           .toString(10) : 
@@ -58,33 +58,33 @@ function summarizePaymentChannel(node) {
         // This includes XRP that has been paid to the destination address.
         // This is initially set by the transaction that created the channel and
         // can be increased if the source address sends a PaymentChannelFund transaction.
-        channel_amount_drops:
+        channelAmountDrops:
           new BigNumber(final.Amount || 0).toString(10),
 
         // Total XRP, in drops, already paid out by the channel.
         // The difference between this value and the Amount field is how much XRP can still
         // be paid to the destination address with PaymentChannelClaim transactions.
         // If the channel closes, the remaining difference is returned to the source address.
-        channel_balance_drops:
+        channelBalanceDrops:
           new BigNumber(final.Balance || 0).toString(10),
 
-        prev_tx: node.PreviousTxnID,
+        previousTxnId: node.PreviousTxnID,
 
         // TODO: Should we keep or remove these?
         // Same as above but in units of XRP instead of drops.
-        channel_amount_change: prev.Amount ?
+        channelAmountChange: prev.Amount ?
           dropsToXRP(new BigNumber(final.Amount))
           .minus(dropsToXRP(new BigNumber(prev.Amount || 0)))
           .toString(10) :
           undefined,
-        channel_balance_change: final.Balance ?
+        channelBalanceChange: final.Balance ?
           dropsToXRP(new BigNumber(final.Balance))
           .minus(dropsToXRP(new BigNumber(prev.Balance || 0)))
           .toString(10) :
           undefined,
-        channel_amount:
+        channelAmount:
           dropsToXRP(new BigNumber(final.Amount || 0)).toString(10),
-        channel_balance: 
+        channelBalance: 
           dropsToXRP(new BigNumber(final.Balance || 0)).toString(10)
       };
 }
