@@ -68,24 +68,8 @@ function summarizePaymentChannel(node) {
         channelBalanceDrops:
           new BigNumber(final.Balance || 0).toString(10),
 
-        previousTxnId: node.PreviousTxnID,
-
-        // TODO: Should we keep or remove these?
-        // Same as above but in units of XRP instead of drops.
-        channelAmountChange: prev.Amount ?
-          dropsToXRP(new BigNumber(final.Amount))
-          .minus(dropsToXRP(new BigNumber(prev.Amount || 0)))
-          .toString(10) :
-          undefined,
-        channelBalanceChange: final.Balance ?
-          dropsToXRP(new BigNumber(final.Balance))
-          .minus(dropsToXRP(new BigNumber(prev.Balance || 0)))
-          .toString(10) :
-          undefined,
-        channelAmount:
-          dropsToXRP(new BigNumber(final.Amount || 0)).toString(10),
-        channelBalance: 
-          dropsToXRP(new BigNumber(final.Balance || 0)).toString(10)
+        // Use this to see the history of transactions that affected this payment channel object.
+        previousTxnId: node.PreviousTxnID
       };
 }
 
