@@ -1,4 +1,3 @@
-
 ripple-lib-transactionparser
 ----------------------------
 
@@ -80,3 +79,31 @@ The `ORDER_STATUS` is a string that represents the status of the order in the le
 *   `"cancelled"`: The transaction canceled the order. The values of `quantity` and `totalPrice` are the values of the order prior to cancellation.
 
 The `EXPIRATION_TIME` is an ISO 8601 timestamp representing the time at which the order expires (if there is an expiration time).
+
+### parseChannelChanges(metadata)
+
+Takes a PayChannel metadata object and computes the changes to the payment channel caused by the transaction. It also returns additional details about the payment channel.
+
+The return value is a JavaScript object in the following format:
+
+```javascript
+{
+    status: 'created' | 'modified' | 'deleted',
+    channelId: HEX_STRING,
+    source: RIPPLE_ADDRESS,
+    destination: RIPPLE_ADDRESS,
+    channelAmountChangeDrops: INTEGER_STRING,
+    channelBalanceChangeDrops: INTEGER_STRING,
+    channelAmountDrops: INTEGER_STRING,
+    channelBalanceDrops: INTEGER_STRING,
+    previousTxnId: TX_HASH_HEX_STRING
+}
+```
+
+* `channelId` indicates the Channel ID, which is necessary to sign claims.
+* `source` owns this payment channel. This comes from the sending address of the transaction that created the channel.
+* `destination` is the only address that can receive XRP from the channel. This comes from the Destination field of the transaction that created the channel.
+* `channelAmountChangeDrops` is the change in the amount of XRP drops allocated to this channel. This is positive for a PaymentChannelFund transaction.
+* `channelBalanceChangeDrops` is the change in the amount of XRP drops already paid out by the channel.
+* `channelAmountDrops` is the amount of XRP drops that has been allocated to this channel. This includes XRP that has been paid to the destination address. This is initially set by the transaction that created the channel and can be increased if the source address sends a PaymentChannelFund transaction.
+* `channelBalanceDrops` is the total XRP, in drops, already paid out by the channel. The difference between this value and the Amount is how much XRP can still be paid tot he destination address with PaymentChannelClaim transactions. If the channel closes, the remaining difference is returned to the source address.
