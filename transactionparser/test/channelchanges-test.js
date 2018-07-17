@@ -62,11 +62,7 @@ describe('parseChannelChanges', function() {
       channelBalanceChangeDrops: '10000',
       channelAmountDrops: '10000000',
       channelBalanceDrops: '40000',
-      previousTxnId: '5E854E78A51C45FC626C61924C20EA25670EF18E5609DA5F1F7898E833DCB257',
-      channelAmountChange: undefined,
-      channelBalanceChange: '0.01',
-      channelAmount: '10',
-      channelBalance: '0.04'
+      previousTxnId: '5E854E78A51C45FC626C61924C20EA25670EF18E5609DA5F1F7898E833DCB257'
     }
     assert.deepEqual(result, expectedResult)
   })
