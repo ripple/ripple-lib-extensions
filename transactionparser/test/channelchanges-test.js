@@ -58,7 +58,6 @@ describe('parseChannelChanges', function() {
       channelId: 'EC4DACE3360DCBF76FE80874931F2C75C5B4B6A05D615FA3E62DFF2BE34A8ACB',
       source: 'rpyC4JM5kifsNG6YbARDAxAJQLBDZw9ZFQ',
       destination: 'rJNa71cLCjzQG68oNjh4fCUqCZSGNkWDrM',
-      channelAmountChangeDrops: undefined,
       channelBalanceChangeDrops: '10000',
       channelAmountDrops: '10000000',
       channelBalanceDrops: '40000',

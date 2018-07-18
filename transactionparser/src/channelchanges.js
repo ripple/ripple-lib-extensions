@@ -1,6 +1,6 @@
-const normalizeNodes = require('./utils').normalizeNodes;
-const dropsToXRP = require('./utils').dropsToXRP;
-const BigNumber = require('bignumber.js');
+const normalizeNodes = require('./utils').normalizeNodes
+const dropsToXRP = require('./utils').dropsToXRP
+const BigNumber = require('bignumber.js')
 
 function parsePaymentChannelStatus(node) {
   if (node.diffType === 'CreatedNode') {
@@ -19,10 +19,10 @@ function parsePaymentChannelStatus(node) {
 
 function summarizePaymentChannel(node) {
 
-      const final = (node.diffType === 'CreatedNode') ? node.newFields : node.finalFields;
-      const prev = node.previousFields || {};
+      const final = (node.diffType === 'CreatedNode') ? node.newFields : node.finalFields
+      const prev = node.previousFields || {}
 
-      return {
+      const summary = {
         // Status may be 'created', 'modified', or 'deleted'.
         status: parsePaymentChannelStatus(node),
 
@@ -39,21 +39,6 @@ function summarizePaymentChannel(node) {
         // that created the channel.
         destination: final.Destination,
 
-        // The change in the number of XRP drops allocated to this channel.
-        // This is positive if this is a PaymentChannelFund transaction.
-        channelAmountChangeDrops: prev.Amount ? 
-          new BigNumber(final.Amount)
-          .minus(new BigNumber(prev.Amount || 0))
-          .toString(10) :
-          undefined,
-
-        // The change in the number of XRP drops already paid out by the channel.
-        channelBalanceChangeDrops: final.Balance ? 
-          new BigNumber(final.Balance)
-          .minus(new BigNumber(prev.Balance || 0))
-          .toString(10) : 
-          undefined,
-
         // Total XRP, in drops, that has been allocated to this channel.
         // This includes XRP that has been paid to the destination address.
         // This is initially set by the transaction that created the channel and
@@ -66,12 +51,31 @@ function summarizePaymentChannel(node) {
         // be paid to the destination address with PaymentChannelClaim transactions.
         // If the channel closes, the remaining difference is returned to the source address.
         channelBalanceDrops:
-          new BigNumber(final.Balance || 0).toString(10),
+          new BigNumber(final.Balance || 0).toString(10)
+      }
 
+      if (prev.Amount) {
+        // The change in the number of XRP drops allocated to this channel.
+        // This is positive if this is a PaymentChannelFund transaction.
+        summary.channelAmountChangeDrops = new BigNumber(final.Amount)
+          .minus(new BigNumber(prev.Amount || 0))
+          .toString(10)
+      }
+      
+      if (prev.Balance) {
+        // The change in the number of XRP drops already paid out by the channel.
+        summary.channelBalanceChangeDrops = new BigNumber(final.Balance)
+          .minus(new BigNumber(prev.Balance || 0))
+          .toString(10)
+      }
+
+      if (node.PreviousTxnID) {
         // The identifying hash of the transaction that most recently modified this payment channel object.
         // You can use this to retrieve the object's history.
-        previousTxnId: node.PreviousTxnID
-      };
+        summary.previousTxnId = node.PreviousTxnID
+      }
+
+      return summary
 }
 
 function parseChannelChanges(metadata) {
@@ -83,4 +87,4 @@ function parseChannelChanges(metadata) {
     undefined
 }
 
-module.exports.parseChannelChanges = parseChannelChanges;
+module.exports.parseChannelChanges = parseChannelChanges
