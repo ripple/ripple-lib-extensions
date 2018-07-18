@@ -1,6 +1,6 @@
 {
   "name": "ripple-lib-transactionparser",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Parses transaction objects to a higher-level view",
   "license": "ISC",
   "scripts": {
