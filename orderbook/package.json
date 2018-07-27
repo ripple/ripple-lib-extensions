@@ -30,8 +30,8 @@
     "node": ">=0.12.0"
   },
   "dependencies": {
-    "lodash": "^3.10.1",
     "babel-runtime": "^5.8.29",
+    "lodash": "^3.10.1",
     "ripple-address-codec": "^2.0.1",
     "ripple-binary-codec": "^0.1.2",
     "ripple-lib-value": "0.1.0"
@@ -49,7 +49,7 @@
     "istanbul": "^0.3.22",
     "json-loader": "^0.5.4",
     "mocha": "^2.3.3",
-    "ripple-lib": "0.13.2",
+    "ripple-lib": "0.22.0",
     "webpack-stream": "^3.1.0"
   }
 }
