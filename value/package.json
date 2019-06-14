@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "babel-runtime": "^5.5.4",
-    "bignumber.js": "~2.0.3"
+    "bignumber.js": "^8.0.0"
   },
   "devDependencies": {
     "babel": "^5.8.21",

@@ -2,7 +2,7 @@
 var _ = require('lodash')
 var utils = require('./utils')
 var GlobalBigNumber = require('bignumber.js')
-var BigNumber = GlobalBigNumber.another({DECIMAL_PLACES: 40})
+var BigNumber = GlobalBigNumber.clone({DECIMAL_PLACES: 40})
 var parseQuality = require('./quality')
 
 var lsfSell = 0x00020000   // see "lsfSell" flag in rippled source code
