@@ -4,7 +4,7 @@
 
 const GlobalBigNumber = require('bignumber.js');
 
-const BigNumber = GlobalBigNumber.another({
+const BigNumber = GlobalBigNumber.clone({
   ROUNDING_MODE: GlobalBigNumber.ROUND_HALF_UP,
   DECIMAL_PLACES: 40
 });

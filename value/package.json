@@ -1,6 +1,6 @@
 {
   "name": "ripple-lib-value",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "ISC",
   "description": "Classes for dealing with Ripple amount values",
   "files": [
@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "babel-runtime": "^5.5.4",
-    "bignumber.js": "~2.0.3"
+    "bignumber.js": "^8.0.0"
   },
   "devDependencies": {
     "babel": "^5.8.21",

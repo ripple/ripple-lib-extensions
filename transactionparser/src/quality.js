@@ -12,7 +12,7 @@ function adjustQualityForXRP(quality, takerGetsCurrency, takerPaysCurrency) {
   var denominatorShift = (takerGetsCurrency === 'XRP' ? -6 : 0)
   var shift = numeratorShift - denominatorShift
   return shift === 0 ? (new BigNumber(quality)).toString() :
-    (new BigNumber(quality)).shift(shift).toString()
+    (new BigNumber(quality)).shiftedBy(shift).toString()
 }
 
 function parseQuality(qualityHex, takerGetsCurrency, takerPaysCurrency) {
