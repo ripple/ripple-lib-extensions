@@ -26,11 +26,11 @@ describe('parseOrderbookChanges', function() {
   })
 
   it('parse OfferCreate -- consumed offer, no changes to TakerGets',
-  function() {
-    var meta = fixtures.offerCreateNoChangeTakerGets().meta
-    var expected = fixtures.parsedOfferCreateNoChangeTakerGets()
-    assert.deepEqual(parseOrderbookChanges(meta), expected)
-  })
+    function() {
+      var meta = fixtures.offerCreateNoChangeTakerGets().meta
+      var expected = fixtures.parsedOfferCreateNoChangeTakerGets()
+      assert.deepEqual(parseOrderbookChanges(meta), expected)
+    })
 
   it('order with expiration', function() {
     var meta = orderWithExpiration.meta

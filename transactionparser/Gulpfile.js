@@ -11,20 +11,20 @@ var name = 'ripple-transaction-parser-' + pkg.version
 
 gulp.task('build', function() {
   return gulp.src('./src/index.js')
-  .pipe(webpack({
-    output: {
-      library: 'rippleTransactionParser',
-      filename: name + '.js'
-    }
-  }))
-  .pipe(gulp.dest('./dist/web/'))
+    .pipe(webpack({
+      output: {
+        library: 'rippleTransactionParser',
+        filename: name + '.js'
+      }
+    }))
+    .pipe(gulp.dest('./dist/web/'))
 })
 
 gulp.task('build-min', ['build'], function() {
   return gulp.src('./dist/web/' + name + '.js')
-  .pipe(uglify())
-  .pipe(rename(name + '.min.js'))
-  .pipe(gulp.dest('./dist/web/'))
+    .pipe(uglify())
+    .pipe(rename(name + '.min.js'))
+    .pipe(gulp.dest('./dist/web/'))
 })
 
 

@@ -5,7 +5,7 @@ var GlobalBigNumber = require('bignumber.js')
 var BigNumber = GlobalBigNumber.clone({DECIMAL_PLACES: 40})
 var parseQuality = require('./quality')
 
-var lsfSell = 0x00020000   // see "lsfSell" flag in rippled source code
+var lsfSell = 0x00020000 // see "lsfSell" flag in rippled source code
 
 function removeUndefined(obj) {
   return _.omitBy(obj, _.isUndefined)
