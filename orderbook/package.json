@@ -1,6 +1,6 @@
 {
   "name": "ripple-lib-orderbook",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "license": "ISC",
   "description": "Convenient Orderbook class.",
   "files": [
@@ -32,9 +32,9 @@
   "dependencies": {
     "babel-runtime": "^5.8.29",
     "lodash": "^3.10.1",
-    "ripple-address-codec": "^2.0.1",
-    "ripple-binary-codec": "^0.1.2",
-    "ripple-lib-value": "0.1.0"
+    "ripple-address-codec": "^4.0.0",
+    "ripple-binary-codec": "^0.2.4",
+    "ripple-lib-value": "^0.2.1"
   },
   "devDependencies": {
     "assert-diff": "^1.0.1",
