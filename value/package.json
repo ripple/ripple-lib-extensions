@@ -37,7 +37,7 @@
     "babel": "^5.8.21",
     "babel-core": "^5.8.22",
     "babel-eslint": "^4.0.5",
-    "flow-bin": "^0.14",
+    "flow-bin": "^0.112.0",
     "istanbul": "^0.3.5",
     "mocha": "^2.1.0"
   }
