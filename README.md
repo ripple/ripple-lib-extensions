@@ -3,6 +3,10 @@ ripple-lib-extensions
 
 A collection of packages that extend the functionality of ripple-lib.
 
+## Not maintained
+
+Warning: These packages are not actively maintained. We recommend using [ripple-lib](https://github.com/ripple/ripple-lib) instead.
+
 #### Use in the Browser
 
 These modules will need to be compiled for use in the browser.
