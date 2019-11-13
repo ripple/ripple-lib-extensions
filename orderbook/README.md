@@ -18,6 +18,3 @@ Live updating orderbook data from the XRP Ledger.
     });
   });
 ```
-
-[![NPM](https://nodei.co/npm/ripple-lib-orderbook.png)](https://www.npmjs.org/package/ripple-lib-orderbook)
-
