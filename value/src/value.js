@@ -56,12 +56,12 @@ class Value {
   }
 
   invert() {
-    const result = (new BigNumber(this._value)).toPower(-1);
+    const result = (new BigNumber(this._value)).exponentiatedBy(-1);
     return this._canonicalize(result);
   }
 
   round(decimalPlaces: number, roundingMode: number) {
-    const result = this._value.round(decimalPlaces, roundingMode);
+    const result = this._value.decimalPlaces(decimalPlaces, roundingMode);
     return this._canonicalize(result);
   }
 
@@ -91,12 +91,12 @@ class Value {
 
   greaterThan(comparator: Value) {
     assert(this.constructor === comparator.constructor);
-    return this._value.greaterThan(comparator._value);
+    return this._value.isGreaterThan(comparator._value);
   }
 
   lessThan(comparator: Value) {
     assert(this.constructor === comparator.constructor);
-    return this._value.lessThan(comparator._value);
+    return this._value.isLessThan(comparator._value);
   }
 
   comparedTo(comparator: Value) {

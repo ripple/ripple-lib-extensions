@@ -16,7 +16,7 @@ class IOUValue extends Value {
   constructor(value: string | BigNumber, roundingMode: ?number = null,
   base: ?number = null) {
 
-    super(new BigNumber(value, base).toDigits(16, roundingMode));
+    super(new BigNumber(value, base).precision(16, roundingMode));
   }
 
   multiply(multiplicand: Value) {
@@ -37,7 +37,7 @@ class IOUValue extends Value {
   }
 
   negate() {
-    return new IOUValue(this._value.neg());
+    return new IOUValue(this._value.negated());
   }
 
   _canonicalize(value) {
@@ -49,7 +49,7 @@ class IOUValue extends Value {
 
   equals(comparator) {
     return (comparator instanceof IOUValue)
-      && this._value.equals(comparator._value);
+      && this._value.isEqualTo(comparator._value);
   }
 }
 
