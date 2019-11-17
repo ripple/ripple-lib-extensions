@@ -19,7 +19,7 @@ const {EventEmitter} = require('events')
 const {normalizeCurrency, isValidCurrency} = require('./currencyutils')
 const {AutobridgeCalculator} = require('./autobridgecalculator')
 const OrderBookUtils = require('./orderbookutils')
-const {isValidAddress} = require('ripple-address-codec')
+const {isValidClassicAddress} = require('ripple-address-codec')
 const {XRPValue, IOUValue} = require('ripple-lib-value')
 const log = require('./log').internal.sub('orderbook')
 
@@ -229,9 +229,9 @@ class OrderBook extends EventEmitter {
     // XXX Should check for same currency (non-native) && same issuer
     return (
       Boolean(this._currencyPays) && isValidCurrency(this._currencyPays) &&
-      (this._currencyPays === 'XRP' || isValidAddress(this._issuerPays)) &&
+      (this._currencyPays === 'XRP' || isValidClassicAddress(this._issuerPays)) &&
       Boolean(this._currencyGets) && isValidCurrency(this._currencyGets) &&
-      (this._currencyGets === 'XRP' || isValidAddress(this._issuerGets)) &&
+      (this._currencyGets === 'XRP' || isValidClassicAddress(this._issuerGets)) &&
       !(this._currencyPays === 'XRP' && this._currencyGets === 'XRP')
     )
   }
@@ -981,7 +981,7 @@ class OrderBook extends EventEmitter {
 
   _validateAccount(account: string): void {
     if (this._validAccounts[account] === undefined) {
-      assert(isValidAddress(account), 'node has an invalid account')
+      assert(isValidClassicAddress(account), 'node has an invalid account')
       this._validAccounts[account] = true
       this._validAccountsCount++
     }
