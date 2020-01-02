@@ -1,3 +1,5 @@
+# DEPRECATED: This library is not maintained.
+
 # ripple-lib-orderbook
 
 Live updating orderbook data from the XRP Ledger.
