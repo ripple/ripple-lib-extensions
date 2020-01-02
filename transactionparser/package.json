@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "assert-diff": "*",
-    "coveralls": "^2.10.0",
+    "coveralls": "^3.0.9",
     "eslint": "6.1.0",
     "gulp": "^4.0.2",
     "gulp-rename": "^1.2.2",
