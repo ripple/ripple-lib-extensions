@@ -80,7 +80,7 @@ function parseTrustlineQuantity(node, valueParser) {
   /*
    * A trustline can be created with a non-zero starting balance
    * If an offer is placed to acquire an asset with no existing trustline,
-   * the trustline can be created when the ofer is taken.
+   * the trustline can be created when the offer is taken.
    */
   var fields = _.isEmpty(node.newFields) ? node.finalFields : node.newFields
 
