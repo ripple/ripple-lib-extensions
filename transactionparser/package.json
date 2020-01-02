@@ -29,7 +29,7 @@
     "gulp": "^4.0.2",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^3.0.2",
-    "istanbul": "^0.2.10",
+    "istanbul": "^0.4.5",
     "mocha": "*"
   }
 }
