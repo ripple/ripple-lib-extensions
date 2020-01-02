@@ -41,7 +41,7 @@
     "babel": "^5.8.29",
     "babel-core": "^5.8.29",
     "babel-eslint": "^6.0.0",
-    "eslint": "2.7.0",
+    "eslint": "4.18.2",
     "flow-bin": "^0.101.0",
     "gulp": "^3.9.0",
     "gulp-rename": "^1.2.2",
