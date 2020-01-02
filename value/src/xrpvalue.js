@@ -40,19 +40,19 @@ class XRPValue extends Value {
   }
 
   negate() {
-    return new XRPValue(this._value.neg());
+    return new XRPValue(this._value.negated());
   }
 
   _canonicalize(value) {
     if (value.isNaN()) {
       throw new Error('Invalid result');
     }
-    return new XRPValue(value.round(6, BigNumber.ROUND_DOWN));
+    return new XRPValue(value.decimalPlaces(6, BigNumber.ROUND_DOWN));
   }
 
   equals(comparator) {
     return (comparator instanceof XRPValue)
-      && this._value.equals(comparator._value);
+      && this._value.isEqualTo(comparator._value);
   }
 }
 
