@@ -1,29 +1,27 @@
-/* @flow */
+import {Value} from './value'
+import {XRPValue} from './xrpvalue'
+import BigNumber from 'bignumber.js'
 
-'use strict';
-
-const Value = require('./value').Value;
-const XRPValue = require('./xrpvalue').XRPValue;
-const GlobalBigNumber = require('bignumber.js');
-const BigNumber = GlobalBigNumber.clone({
-  ROUNDING_MODE: GlobalBigNumber.ROUND_HALF_UP,
+const IOUNumber = BigNumber.clone({
+  ROUNDING_MODE: BigNumber.ROUND_HALF_UP,
   DECIMAL_PLACES: 40
-});
-const rippleUnits = new BigNumber(1e6);
+})
+
+const xrpUnits = new IOUNumber(1e6);
 
 class IOUValue extends Value {
 
-  constructor(value: string | BigNumber, roundingMode: ?number = null,
-  base: ?number = null) {
+  constructor(value: string | BigNumber, roundingMode: BigNumber.RoundingMode = null,
+  base: number = null) {
 
-    super(new BigNumber(value, base).precision(16, roundingMode));
+    super(new IOUNumber(value, base).precision(16, roundingMode));
   }
 
   multiply(multiplicand: Value) {
     if (multiplicand instanceof XRPValue) {
       return super.multiply(
         new IOUValue(
-          multiplicand._value.times(rippleUnits)));
+          multiplicand._value.times(xrpUnits)));
     }
     return super.multiply(multiplicand);
   }
@@ -31,7 +29,7 @@ class IOUValue extends Value {
   divide(divisor: Value) {
     if (divisor instanceof XRPValue) {
       return super.divide(
-        new IOUValue(divisor._value.times(rippleUnits)));
+        new IOUValue(divisor._value.times(xrpUnits)));
     }
     return super.divide(divisor);
   }
@@ -53,4 +51,4 @@ class IOUValue extends Value {
   }
 }
 
-exports.IOUValue = IOUValue;
+export {IOUValue}

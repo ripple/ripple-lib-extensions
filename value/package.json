@@ -1,20 +1,20 @@
 {
   "name": "ripple-lib-value",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "license": "ISC",
-  "description": "Classes for dealing with Ripple amount values",
+  "description": "Classes for dealing with XRP Ledger amount values",
   "files": [
     "dist/npm/*",
     "test/*"
   ],
   "scripts": {
+    "build:lib": "tsc --build",
+    "build": "yarn build:lib",
     "clean": "rm -rf dist/npm && rm -rf build/flow",
-    "typecheck": "babel --optional runtime --blacklist flow -d build/flow/ src/ && flow check",
-    "compile": "babel -D --optional runtime -d dist/npm/ src/",
-    "prepublish": "npm run clean && npm run compile",
-    "test": "istanbul test _mocha",
-    "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "lint": "if ! [ -f eslintrc ]; then curl -o eslintrc 'https://raw.githubusercontent.com/ripple/javascript-style-guide/es6/eslintrc'; echo 'parser: babel-eslint' >> eslintrc; fi; eslint -c eslintrc src/"
+    "prepublish": "yarn clean && yarn build",
+    "lint": "eslint 'src/**/*.ts' 'test/*.{ts,js}'",
+    "test": "mocha",
+    "coverage": "nyc mocha"
   },
   "repository": {
     "type": "git",
@@ -27,19 +27,22 @@
     "ripple-lib-value"
   ],
   "engines": {
-    "node": ">=0.12.0"
+    "node": ">=8",
+    "yarn": "^1.15.2"
   },
   "dependencies": {
-    "babel-runtime": "^5.5.4",
     "bignumber.js": "^9.0.0",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
-    "babel": "^6.23.0",
-    "babel-core": "^6.26.3",
-    "babel-eslint": "^4.0.5",
-    "flow-bin": "^0.112.0",
-    "istanbul": "^0.3.5",
-    "mocha": "^2.1.0"
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^13.1.2",
+    "@typescript-eslint/eslint-plugin": "^2.14.0",
+    "@typescript-eslint/parser": "^2.14.0",
+    "eslint": "^6.8.0",
+    "mocha": "^6.2.2",
+    "nyc": "^15.0.0",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.4"
   }
 }

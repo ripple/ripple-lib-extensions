@@ -1,24 +1,21 @@
-/* @flow */
+import BigNumber from 'bignumber.js'
+import assert from 'assert'
 
-'use strict';
-
-const GlobalBigNumber = require('bignumber.js');
-
-const BigNumber = GlobalBigNumber.clone({
-  ROUNDING_MODE: GlobalBigNumber.ROUND_HALF_UP,
+const IOUNumber = BigNumber.clone({
+  ROUNDING_MODE: BigNumber.ROUND_HALF_UP,
   DECIMAL_PLACES: 40
 });
 
-const assert = require('assert');
-
 class Value {
 
+  _value: BigNumber
+
   constructor(value: string | BigNumber) {
-    if (this.constructor === 'Value') {
+    if (new.target === Value) {
       throw new Error(
         'Cannot instantiate Value directly, it is an abstract base class');
     }
-    this._value = new BigNumber(value);
+    this._value = new IOUNumber(value);
   }
 
   static getBNRoundDown() {
@@ -56,16 +53,16 @@ class Value {
   }
 
   invert() {
-    const result = (new BigNumber(this._value)).exponentiatedBy(-1);
+    const result = (new IOUNumber(this._value)).exponentiatedBy(-1);
     return this._canonicalize(result);
   }
 
-  round(decimalPlaces: number, roundingMode: number) {
+  round(decimalPlaces: number, roundingMode: BigNumber.RoundingMode) {
     const result = this._value.decimalPlaces(decimalPlaces, roundingMode);
     return this._canonicalize(result);
   }
 
-  toFixed(decimalPlaces: number, roundingMode: number) {
+  toFixed(decimalPlaces: number, roundingMode: BigNumber.RoundingMode) {
     return this._value.toFixed(decimalPlaces, roundingMode);
   }
 
@@ -104,6 +101,9 @@ class Value {
     return this._value.comparedTo(comparator._value);
   }
 
+  _canonicalize(value) {
+    throw new Error('Subclasses must implement _canonicalize')
+  }
 }
 
-exports.Value = Value;
+export {Value}

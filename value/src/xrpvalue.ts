@@ -1,15 +1,12 @@
-/* @flow */
+import BigNumber from 'bignumber.js'
+import {Value} from './value'
 
-'use strict';
-
-const GlobalBigNumber = require('bignumber.js');
-const BigNumber = GlobalBigNumber.clone({
-  ROUNDING_MODE: GlobalBigNumber.ROUND_HALF_UP,
+const IOUNumber = BigNumber.clone({
+  ROUNDING_MODE: BigNumber.ROUND_HALF_UP,
   DECIMAL_PLACES: 40
 });
 
-const Value = require('./value').Value;
-const rippleUnits = new BigNumber(1e6);
+const xrpUnits = new IOUNumber(1e6);
 
 class XRPValue extends Value {
 
@@ -26,7 +23,7 @@ class XRPValue extends Value {
   multiply(multiplicand: Value) {
     if (multiplicand instanceof XRPValue) {
       return super.multiply(
-        new XRPValue(multiplicand._value.times(rippleUnits)));
+        new XRPValue(multiplicand._value.times(xrpUnits)));
     }
     return super.multiply(multiplicand);
   }
@@ -34,7 +31,7 @@ class XRPValue extends Value {
   divide(divisor: Value) {
     if (divisor instanceof XRPValue) {
       return super.divide(
-        new XRPValue(divisor._value.times(rippleUnits)));
+        new XRPValue(divisor._value.times(xrpUnits)));
     }
     return super.divide(divisor);
   }
@@ -56,4 +53,4 @@ class XRPValue extends Value {
   }
 }
 
-exports.XRPValue = XRPValue;
+export {XRPValue}

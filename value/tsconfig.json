@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "pretty": true,
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+
+    "declaration": true,
+    "declarationMap": true /* Added 2019-04-13 */,
+    "sourceMap": true,
+
+    "strict": true /* Enable all strict type-checking options. */,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "removeComments": true,
+    "preserveConstEnums": false,
+    "esModuleInterop": true,
+    "suppressImplicitAnyIndexErrors": false,
+    "resolveJsonModule": true,
+    "preserveSymlinks": true,
+
+    "outDir": "./dist/npm",
+    "rootDir": "."
+  },
+  "include": [
+    "**/*.ts"
+  ]
+}
