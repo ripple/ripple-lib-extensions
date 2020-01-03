@@ -1,11 +1,10 @@
 {
   "name": "ripple-lib-value",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "license": "ISC",
   "description": "Classes for dealing with XRP Ledger amount values",
   "files": [
-    "dist/npm/*",
-    "test/*"
+    "dist/npm/*"
   ],
   "scripts": {
     "build:lib": "tsc --build",
