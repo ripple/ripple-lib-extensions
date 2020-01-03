@@ -364,7 +364,7 @@ class OrderBook extends EventEmitter {
     function listenersModified(action: string, event: string) {
       // Automatically subscribe and unsubscribe to orderbook
       // on the basis of existing event listeners
-      if (_.contains(EVENTS, event)) {
+      if (_.includes(EVENTS, event)) {
 
         switch (action) {
           case 'add':

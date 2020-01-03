@@ -13,8 +13,7 @@
     "compileflow": "babel --optional runtime --blacklist flow,es6.classes -d build/flow/ src/",
     "compile": "babel -D --optional runtime -d dist/npm/ src/",
     "prepublish": "npm run clean && npm run compile",
-    "test": "istanbul test _mocha",
-    "lint": "if ! [ -f eslintrc ]; then curl -o eslintrc 'https://raw.githubusercontent.com/ripple/javascript-style-guide/es6/eslintrc'; echo 'parser: babel-eslint' >> eslintrc; fi; eslint -c eslintrc Gulpfile.js **/*.js"
+    "test": "istanbul test _mocha"
   },
   "repository": {
     "type": "git",
@@ -34,14 +33,12 @@
     "lodash": "^4.17.13",
     "ripple-address-codec": "^4.0.0",
     "ripple-binary-codec": "^0.2.4",
-    "ripple-lib-value": "^0.2.1"
+    "ripple-lib-value": "^0.3.1"
   },
   "devDependencies": {
     "assert-diff": "^1.0.1",
     "babel": "^5.8.29",
     "babel-core": "^5.8.29",
-    "babel-eslint": "^6.0.0",
-    "eslint": "4.18.2",
     "flow-bin": "^0.101.0",
     "gulp": "^3.9.0",
     "gulp-rename": "^1.2.2",
