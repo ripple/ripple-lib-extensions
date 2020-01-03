@@ -47,6 +47,6 @@
     "json-loader": "^0.5.4",
     "mocha": "^6.2.2",
     "ripple-lib": "0.22.0",
-    "webpack-stream": "^3.1.0"
+    "webpack-stream": "^5.2.1"
   }
 }
