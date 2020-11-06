@@ -7,6 +7,9 @@
     "dist/npm/*",
     "test/*"
   ],
+  "babel": {
+    "plugins": ["transform-flow-strip-types"]
+  },
   "scripts": {
     "clean": "rm -rf dist/npm && rm -rf build/flow",
     "typecheck": "babel --optional runtime --blacklist flow,es6.classes -d build/flow/ src/ && flow check",
@@ -37,8 +40,9 @@
   },
   "devDependencies": {
     "assert-diff": "^1.0.1",
-    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "flow-bin": "^0.101.0",
     "gulp": "^4.0.2",
     "gulp-rename": "^1.2.2",
