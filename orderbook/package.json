@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "babel-runtime": "^5.8.29",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "ripple-address-codec": "^4.0.0",
     "ripple-binary-codec": "^0.2.4",
     "ripple-lib-value": "^0.3.1"
